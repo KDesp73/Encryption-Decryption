@@ -2,19 +2,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//Programm
-
-//Menu
-
-//Verify
-
-//create key through hash
-
-//create hash
+//Encryption
 
 //Decryption
 
-//Encryption
+//create hash
+
+//create key through hash
+
+//Verify
+
+//Menu
+
+//Programm
 
 int main(){
 	
