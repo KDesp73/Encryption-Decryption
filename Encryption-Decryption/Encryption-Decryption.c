@@ -1,6 +1,7 @@
 //Encryption - Decryption Project
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 //Encryption
 
@@ -17,7 +18,6 @@
 //Programm
 
 int main(){
-	
 	
 	system("pause");
 	return 0;
