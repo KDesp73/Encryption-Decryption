@@ -4,13 +4,13 @@
 
 //Encryption
 void caesarsCypherEncr(char io[], int num){ //io -> input / output
-	char hexChars[] = {"0123456789abcdef"};
+	char hexChars[] = {"0123456789ABCDEF"};
 	
 	int i, j;
     for (i = 0; i < strlen(io); i++){
         for (j = 0; j < strlen(io);){  //Psaxnei ton characthra sto hexChars
-            while (io[i] != hexChars[j]){
-                j++;
+            while (io[i] != hexChars[j]){        	
+				j++;
             }
             break;
         }
@@ -19,6 +19,7 @@ void caesarsCypherEncr(char io[], int num){ //io -> input / output
             j -= strlen(hexChars);
             io[i] = hexChars[j + num];
         }
+        //else if()
         else{
             io[i] = hexChars[j + num];
             j = 0;
@@ -28,14 +29,14 @@ void caesarsCypherEncr(char io[], int num){ //io -> input / output
 
 //Decryption
 void caesarsCypherDecr(char io[], int num){ //io -> input / output
-	char hexChars[] = {"0123456789abcdef"};
+	char hexChars[] = {"0123456789ABCDEF"};
 	
 	int i, j;
     for (i = 0; i < strlen(io); i++){
         for (j = 0; j < strlen(io);){  //Psaxnei ton characthra sto hexChars
             while (io[i] != hexChars[j]){
                 j++;
-            }
+    		}
             break;
         }
         
