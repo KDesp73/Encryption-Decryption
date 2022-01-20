@@ -1,4 +1,3 @@
-
 //Encryption - Decryption Project
 #include <stdio.h>
 #include <stdlib.h>
