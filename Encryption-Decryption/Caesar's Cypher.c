@@ -32,7 +32,7 @@ void caesarsCypherDecr(char io[], int num){ //io -> input / output
 	
 	int i, j;
     for (i = 0; i < strlen(io); i++){
-        for (j = 0; j < strlen(io);){
+        for (j = 0; j < strlen(io);){  //Psaxnei ton characthra sto hexChars
             while (io[i] != hexChars[j]){
                 j++;
             }
