@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void fileInArray(char c, char line[][50])
+void fileInArray(char c, char array[][50])
 {
 int i=0, j=0;
 FILE *fp;
@@ -17,22 +17,22 @@ while(c!=EOF)
      }
      
 //Apo8hkeush periexomenou arxeiou se array kai emfanish ayths
-while(fgets(line[i],50,fp))
+while(fgets(array[i],50,fp))
      {
-     line[i][strlen(line[i])]='\0';
+     array[i][strlen(array[i])]='\0';
      i++;
-	 }
+     }
 j=i;
 for(i=0; i<j; i++)
-     printf("%s ", line[i]);
+     printf("%s ", array[i]);
 fclose(fp);
 printf("\n");
 }
 
 int main()
 {
-char c, line[50][50];
-fileInArray(c, line);
+char c, array[50][50];
+fileInArray(c, array);
 system("Pause");
 return 0;	
 }
