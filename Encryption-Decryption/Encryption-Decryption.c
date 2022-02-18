@@ -3,8 +3,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+#define max_array 50
+#include <stdbool.h>
+#include <float.h>
 
 //Programm
+int fcounter(char filename[50])
+{
+	char c;
+	int i=0, j=0;
+	FILE *fp;
+	fp=fopen(filename,"r");
+	c=fgetc(fp);
+	int counter =0;
+	
+	//Emfanish periexomenou arxeiou
+	while(c!=EOF)
+	{
+	    //printf("%c", c);
+	    c=fgetc(fp);
+	    counter++;
+	}
+	
+	fclose(fp);
+	return counter;
+}
+
+void fileinarray(char array[], char filename[50]){
+	char c;
+	int i=0, j=0;
+	FILE *fp;
+	fp=fopen(filename,"r");
+	c=fgetc(fp);
+	int counter =0;
+	
+	//Emfanish periexomenou arxeiou
+	while(c!=EOF)
+	{
+	    //printf("%c", c);
+	    c=fgetc(fp);
+	    array[counter] = c;
+	    counter++;
+	}
+	
+	fclose(fp);
+}
 
 //Menu
 
@@ -13,119 +57,132 @@
 //create key through hash
 
 //create hash
-void ch(char afilename[50], int ac_d)
-{
-	char c;
-	int counter = 0;
-	FILE *fptr;
-	fptr = fopen(afilename, "rb");
+int find_first_number(char string[]){
+	int n = 16;//sizeof(string);
+	printf("Size of string: %d\n",n);
+	char numbers[] = "23456789";
 
-	// Open file
-    if (fptr == NULL)
-    {
-        printf("Cannot open file \n");
-        exit(0);
-    }
-	//printf("1\n");
-    // Read contents from file
-    c = fgetc(fptr);
-    while (c != EOF)
-    {
-    	counter += 1;
-    	
-        //printf ("|%d",(int) c);
-        //char str[strlen(c);]
-        c = fgetc(fptr);
-    }
-    
-    int str[counter];
-    //int loi[counter];
-    //printf("2\n");
-    int c2=0;
-    
-    
-    for (int i=0;i<=counter;i++){
-    	str[i] = 0;
-	}
-    
-    //printf("3\n");
-    fclose(fptr);
-    fptr = fopen(afilename, "rb");
-    
-    c = fgetc(fptr);
-    while (c != EOF)
-    {
-    	str[c2] = (int) c;
-        //printf ("|%d",str[c2]);
-        //char str[strlen(c);]
-        c = fgetc(fptr);
-        c2 += 1;
-    }
-    fclose(fptr);
-    
-    int c_d = ac_d;
-    
-    int fvl = counter/c_d;
-    int fv[fvl], fvc=0;
-	//printf("%d\n",fvl);
-    
-    
-    for (int i=0;i<=(fvl)-1;i+=1){
-    	
-    	fv[i] = 0;
-    	if (i==0){
-		
-    		for (int k=0;k<=c_d;k++){
-    			fv[i] += str[i+k];
-			}
-		}else{
-			fv[i] += fv[i-1];
-			for (int k=0;k<=c_d;k++){
-    			fv[i] += str[i+k];
+	//int finall_num = 3;
+	
+	for (int i=0;i<n;i++){
+		for (int j=0;j<=7;j++){
+			if(numbers[j] == string[i]){
+				//printf("num: %c, str: %c\n",numbers[j], string[i]);
+				return j+2;
 			}
 		}
-		//printf("%d\n",fv[i]);
-
 	}
-	//printf("4\n");
+}
+
+void hash(char array[], int counter, char chash[]){
+	char list[100];
+	int intlist[100];
+	int lcounter=0;
 	
-	//fv -> fvl
-	int ti=0;
-	for (int i=0;i<=fvl-1;i++){
-		//printf("-----------");
-		//printf("5%d\n",i);
-		while (fv[i] > 250){
-			ti = fv[i]%10;
-			if(ti==0){
-				fv[i] = (fv[i]/10)-1;
-			}else{
+	for(int i=0;i<=100;i++){
+		intlist[i] = 0;
+	}
+
+	int j;
+	bool flag;
+	
+	for(int i=0;i<=counter;i++){
+		j=0;
+		flag = false;
+		while(flag == false && j<=lcounter){
 			
-				fv[i] = (fv[i]/10)+ti;
+			if(array[i] == list[j]){
+				intlist[j] += 1;
+				flag = true;
 			}
-			//printf("%d\n",fv[i]);
+			j++;
+		}
+		if(flag == false){
+			list[lcounter] = array[i];
+			intlist[lcounter] += 1;
+			lcounter++;
 		}
 	}
 	
-	for (int i=0;i<=fvl-1;i++){
-		printf("%c",(char)fv[i]);
+	int lsum=0;
+	
+	for(int i=0;i<=lcounter;i++){
+		printf("%c : %d\n",list[i],intlist[i]); // emfanizei poses fores emafanistike o kathe xaraktiras
+		lsum += intlist[i];
 	}
-	printf("\n\n");
-    
-  
-    fclose(fptr);
+	
+	double hash=0;
+	double x;
+
+	x = (double)lsum/(lsum-lcounter);
+	if(counter<=2) x = 1.0000000000000000001;
+	
+	hash += x/(1+x);
+	printf("\n\nBefore loop\nx = %lf\nHash = %lf\n",x,hash);	
+	
+	for(int i=0;i<=lcounter;i++){
+		//hash += x/(1+exp(x*-1));
+		hash += x/(1+x);
+	}
+	
+	hash = fabs(hash);
+	hash = hash*pow(10, 16);
+	
+	
+	printf("\n\nx = %lf\nHash = %lf\n",x,hash);
+    printf("\n\nFinal Hash = %.0lf\n\n",hash);
+
+	snprintf(chash, 30, "%f", hash);
+	chash[strcspn(chash, ".")] = 0;
+	
+	
+	int pos1[] = {1,3,4,6,8,0};
+	int pos2[] = {6,8,1,3,4,9};
+	char swap;
+	for(int i=0;i<7;i++){
+		swap = chash[pos1[i]];
+		chash[pos1[i]] = chash[pos2[i]];
+		chash[pos2[i]] = swap;
+	}
+	printf("\n\nPreFinal Hash = %s\n\n",chash);
+	
 }
 
 //Decryption
 
 //Encryption
+void program(char filename[]){
+	int counter;
+	//char filename[50];
+	//strcpy(filename,"test.txt");
+	 
+	counter = fcounter(filename);
+	char array[counter];
+	fileinarray(array,filename);
+	
+	char Hash[30];
+	
+	//strcpy(Hash,hash(array, counter));
+	hash(array, counter, Hash);
+	printf("\nMain Final Hash = %s\n\n",Hash);
+	printf("First Number in Hash: %d\n\n", find_first_number(Hash));
+}
 
 int main(){
-	/*ch("pas.py",2);
-	ch("pass.py",2);
-	ch("pass2.py",2);
-	ch("pass3.py",2);*/
-	ch("h.txt",50);
+	char filename[50];
 	
+	strcpy(filename,"test.txt");
+	program(filename);
+	
+	/*printf("\n==========================================================\n");
+	
+	strcpy(filename,"test2.txt");
+	program(filename);
+	
+	printf("\n==========================================================\n");
+	
+	strcpy(filename,"test3.txt");
+	program(filename);*/
+		
 	system("pause");
-	return 0;
 }
