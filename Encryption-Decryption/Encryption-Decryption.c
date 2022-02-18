@@ -107,7 +107,7 @@ void hash(char array[], int counter, char chash[]){
 	int lsum=0;
 	
 	for(int i=0;i<=lcounter;i++){
-		printf("%c : %d\n",list[i],intlist[i]); // emfanizei poses fores emafanistike o kathe xaraktiras
+		//printf("%c : %d\n",list[i],intlist[i]); // emfanizei poses fores emafanistike o kathe xaraktiras
 		lsum += intlist[i];
 	}
 	
@@ -118,7 +118,7 @@ void hash(char array[], int counter, char chash[]){
 	if(counter<=2) x = 1.0000000000000000001;
 	
 	hash += x/(1+x);
-	printf("\n\nBefore loop\nx = %lf\nHash = %lf\n",x,hash);	
+	//printf("\n\nBefore loop\nx = %lf\nHash = %lf\n",x,hash);	
 	
 	for(int i=0;i<=lcounter;i++){
 		//hash += x/(1+exp(x*-1));
@@ -129,8 +129,8 @@ void hash(char array[], int counter, char chash[]){
 	hash = hash*pow(10, 16);
 	
 	
-	printf("\n\nx = %lf\nHash = %lf\n",x,hash);
-    printf("\n\nFinal Hash = %.0lf\n\n",hash);
+	//printf("\n\nx = %lf\nHash = %lf\n",x,hash);
+    //printf("\n\nFinal Hash = %.0lf\n\n",hash);
 
 	snprintf(chash, 30, "%f", hash);
 	chash[strcspn(chash, ".")] = 0;
@@ -144,7 +144,7 @@ void hash(char array[], int counter, char chash[]){
 		chash[pos1[i]] = chash[pos2[i]];
 		chash[pos2[i]] = swap;
 	}
-	printf("\n\nPreFinal Hash = %s\n\n",chash);
+	//printf("\n\nPreFinal Hash = %s\n\n",chash);
 	
 }
 
@@ -174,7 +174,7 @@ int main(){
 	strcpy(filename,"test.txt");
 	program(filename);
 	
-	/*printf("\n==========================================================\n");
+	printf("\n==========================================================\n");
 	
 	strcpy(filename,"test2.txt");
 	program(filename);
@@ -182,7 +182,7 @@ int main(){
 	printf("\n==========================================================\n");
 	
 	strcpy(filename,"test3.txt");
-	program(filename);*/
+	program(filename);
 		
 	system("pause");
 }
