@@ -4,9 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#define max_array 50
 #include <stdbool.h>
-#include <float.h>
 
 //Programm
 int fcounter(char filename[50])
@@ -36,13 +34,19 @@ void fileinarray(char array[], char filename[50]){
 	FILE *fp;
 	fp=fopen(filename,"r");
 	c=fgetc(fp);
-	int counter =0;
+	int counter =0, first=0;
 	
 	//Emfanish periexomenou arxeiou
 	while(c!=EOF)
 	{
+		if(first==0){
+			array[counter] = c;
+			c=fgetc(fp);
+	    	counter++;
+	    	first=1;
+		}
 	    //printf("%c", c);
-	    c=fgetc(fp);
+		c=fgetc(fp);
 	    array[counter] = c;
 	    counter++;
 	}
@@ -159,6 +163,7 @@ void program(char filename[]){
 	counter = fcounter(filename);
 	char array[counter];
 	fileinarray(array,filename);
+	printf("counter: %d\nfile: %s\n",counter,array);
 	
 	char Hash[30];
 	
