@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-void revString(char string[], char revstr[]){
+/*void revString(char string[], char revstr[]){
     for(int i = 0; i < strlen(string); i++){
         revstr[i] = string[strlen(string) - i - 1];
     }
     printf("\n");
-}
+}*/
 
 void swap(char io[], int num, int size){
 	while(size % num != 0){
@@ -24,10 +24,9 @@ void swap(char io[], int num, int size){
 			io[size - num + j - i] = temp;	
 		}
 	}
-
 }
 
-void swapInHalf(char string[]){
+/*void swapInHalf(char string[]){
 	char firstHalf[strlen(string)/2];
 	char secondHalf[strlen(string)/2];
 	
@@ -39,15 +38,14 @@ void swapInHalf(char string[]){
 
 	strcpy(string, strcat(secondHalf, firstHalf));
 }
-
+*/
 int main(){
-	char revstr[20];
 	char string[] = "abcdefghijklmnopqrstuvwxyz";
 	printf("String: %s\n", string);
 	swap(string, 2, 26);
 	printf("Swapped string: %s\n", string);
 	
-	printf("Done\n");
+	printf("\n\nDone\n");
 	system("pause");
 	return 0;
 }

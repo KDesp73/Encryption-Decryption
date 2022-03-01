@@ -4,7 +4,7 @@
 
 //Encryption
 void caesarsCypherEncr(char io[], int num){ //io -> input / output
-	char hexChars[] = "0123456789abcdef";
+	char hexChars[] = "0123456789ABCDEF";
 	
 	int i, j;
     for (i = 0; i < strlen(io); i++){
@@ -29,7 +29,7 @@ void caesarsCypherEncr(char io[], int num){ //io -> input / output
 
 //Decryption
 void caesarsCypherDecr(char io[], int num){ //io -> input / output
-	char hexChars[] = "0123456789abcdef";
+	char hexChars[] = "0123456789ABCDEF";
 	
 	int i, j;
     for (i = 0; i < strlen(io); i++){
