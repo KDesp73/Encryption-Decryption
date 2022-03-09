@@ -138,28 +138,29 @@ void hash(char array[], int counter, char chash[]){
     //printf("\n\nFinal Hash = %.0lf\n\n",hash);
     
 
+	
+	
+	
 	snprintf(chash, 30, "%f", hash);
 	chash[strcspn(chash, ".")] = 0;
 	
-    for (int i = 0; i < strlen(chash); i++) {
-        char j = rand() % strlen(chash);
-        char t = chash[i];
-        chash[i] = chash[j];
-        chash[j] = t;
-    }
-	/*int pos1[] = {1,3,4,6,8,0};
+	int pos1[] = {1,3,4,6,8,0};
 	int pos2[] = {6,8,1,3,4,9};
-	char swap;
-	printf("yyyy");
+	int k=0;
+	int i,m;
+	char t;
+    for (int o = 0; o < 6; o++) {
+    	
+        i = pos2[o];
+        m = pos1[o];
+        
+        t = chash[i];
+        chash[i] = chash[m];
+        chash[m] = t;
+        
+    }
 	
-	for(int i=0;i<=6;i++){
-		swap = chash[pos1[i]];
-		//strcpy(chash[pos1[i]],chash[pos2[i]]);
-		//strcpy(chash[pos2[i]],swap);
-		chash[pos1[i]] = chash[pos2[i]];
-		chash[pos2[i]] = swap;
-	}*/
-	//printf("\n\nPreFinal Hash = %s\n\n",chash);
+	printf("\n\nPreFinal Hash = %s\n\n",chash);
 	
 }
 
