@@ -20,6 +20,7 @@ int fcounter(char filename[50])
 	while(c!=EOF)
 	{
 	    //printf("%c", c);
+	    
 	    c=fgetc(fp);
 	    counter++;
 	}
@@ -135,19 +136,29 @@ void hash(char array[], int counter, char chash[]){
 	
 	//printf("\n\nx = %lf\nHash = %lf\n",x,hash);
     //printf("\n\nFinal Hash = %.0lf\n\n",hash);
+    
 
 	snprintf(chash, 30, "%f", hash);
 	chash[strcspn(chash, ".")] = 0;
 	
-	
-	int pos1[] = {1,3,4,6,8,0};
+    for (int i = 0; i < strlen(chash); i++) {
+        char j = rand() % strlen(chash);
+        char t = chash[i];
+        chash[i] = chash[j];
+        chash[j] = t;
+    }
+	/*int pos1[] = {1,3,4,6,8,0};
 	int pos2[] = {6,8,1,3,4,9};
 	char swap;
-	for(int i=0;i<7;i++){
+	printf("yyyy");
+	
+	for(int i=0;i<=6;i++){
 		swap = chash[pos1[i]];
+		//strcpy(chash[pos1[i]],chash[pos2[i]]);
+		//strcpy(chash[pos2[i]],swap);
 		chash[pos1[i]] = chash[pos2[i]];
 		chash[pos2[i]] = swap;
-	}
+	}*/
 	//printf("\n\nPreFinal Hash = %s\n\n",chash);
 	
 }
@@ -163,7 +174,8 @@ void program(char filename[]){
 	counter = fcounter(filename);
 	char array[counter];
 	fileinarray(array,filename);
-	printf("counter: %d\nfile: %s\n",counter,array);
+	//printf("counter: %d\nfile: %s\n",counter,array);
+	printf("\ncounter: %d\n",counter);
 	
 	char Hash[30];
 	
