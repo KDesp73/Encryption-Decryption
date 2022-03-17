@@ -52,22 +52,35 @@ void getWholeFile(char file[], char buffer[]){
 }
 
 //create hash
-int find_first_number(char string[]){
+int find_first_number(char string[], int counter){
 	int n = 16;//sizeof(string);
 	//printf("Size of string: %d\n",n);
 	char numbers[] = "23456789";
 
-	//int finall_num = 3;
+	int finall_num;
 	int i,j;
 	for(i=0;i<n;i++){
 		for (j=0;j<=7;j++){
 			if(numbers[j] == string[i]){
 				//printf("num: %c, str: %c\n",numbers[j], string[i]);
-				return j+2;
+				finall_num = j+2;
 			}
 		}
 	}
+	if(finall_num >= counter){
+		if(counter == 1){
+			finall_num =1;
+		}
+		else{
+			finall_num = counter-1;
+		}
+		
+	}
+	if(counter == 1){
+		finall_num =1;
+	}
 	
+	return finall_num;
 }
 
 void hash(char array[], int counter, char chash[]){
@@ -427,9 +440,9 @@ void encryption(char file[]){
 	
 	
 	printf("\n==========================================================\n");
-	printf("First Hash Num: %d\n", find_first_number(Hash));
+	printf("First Hash Num: %d\n", find_first_number(Hash,counter));
 	printf("Contents before swap: %s\n", contents);
-	swap(contents, find_first_number(Hash)); //Dokimh
+	swap(contents, find_first_number(Hash,counter)); //Dokimh
 	printf("Contents after swap: %s", contents);
 	
 	printf("\n==========================================================\n");
@@ -440,7 +453,7 @@ void encryption(char file[]){
 	
 	printf("\n==========================================================\n");
 	
-	caesarsCypherEncr(hex, find_first_number(Hash)); //Dokimh
+	caesarsCypherEncr(hex, find_first_number(Hash,counter)); //Dokimh
 	printf("Contents after caesars: %s", hex);
 	printf("\n==========================================================\n");
 	
@@ -468,13 +481,13 @@ void decryption(char file[]){
 	removeGarbage(encrCont, 10, 16);
 	printf("Contents after removal: %s", encrCont);
 	
-	caesarsCypherDecr(encrCont, find_first_number(Hash));
+	caesarsCypherDecr(encrCont, find_first_number(Hash,counter));
 	printf("\n\nContents after caesars: %s", encrCont);
 	
 	hexToString(encrCont);
 	printf("\n\nContents after hex: %s", encrCont);
 	
-	swap(encrCont, find_first_number(Hash));
+	swap(encrCont, find_first_number(Hash,counter));
 	printf("\n\nContents after swap: %s", encrCont);
 	
 	/*char filename[50];
