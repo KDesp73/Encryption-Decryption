@@ -481,13 +481,13 @@ void decryption(char file[]){
 	removeGarbage(encrCont, 10, 16);
 	printf("Contents after removal: %s", encrCont);
 	
-	caesarsCypherDecr(encrCont, find_first_number(Hash,counter));
+	caesarsCypherDecr(encrCont, find_first_number(Hash,size));
 	printf("\n\nContents after caesars: %s", encrCont);
 	
 	hexToString(encrCont);
 	printf("\n\nContents after hex: %s", encrCont);
 	
-	swap(encrCont, find_first_number(Hash,counter));
+	swap(encrCont, find_first_number(Hash,size));
 	printf("\n\nContents after swap: %s", encrCont);
 	
 	/*char filename[50];
