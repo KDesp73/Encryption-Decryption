@@ -505,7 +505,7 @@ void mainMenu(){
 	int choice;
 	do{
 		printf("> ");
-		scanf("%d", choice);
+		scanf("%d", &choice);
 	}
 	while(choice < 1 || choice > 3);
 	
