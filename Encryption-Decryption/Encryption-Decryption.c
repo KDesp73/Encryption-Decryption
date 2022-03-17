@@ -8,6 +8,33 @@
 
 #define MAX 500
 
+bool checkName(char name[]){
+	char characters[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_,!@#$%^&*()+=;:{[]}";
+	
+	int i,j, count;
+	for(i=0; i<strlen(name); i++){
+		for(j=0; j<strlen(characters); j++){
+			if(name[i] == characters[j])
+				count++;
+		}
+	}
+	
+	if(count == strlen(name))
+		return true;
+	else
+		return false;
+}
+
+
+void askFile(char file[]){
+	do{
+		printf("Give file name: ");
+		scanf("%s", file);
+	}
+	while(!checkName(file)); // && !checkName(file)!checkTXT(file)
+	
+	strcat(file, ".txt");
+}
 
 //Get file
 int fcounter(char filename[50]){
@@ -69,7 +96,8 @@ int find_first_number(char string[]){
 	}
 }
 
-void hash(char array[], int counter, char chash[]){
+void hash(char array[], int counter, char HASH[]){
+	char chash[20];
 	char list[100];
 	int intlist[100];
 	int lcounter=0;
@@ -149,7 +177,12 @@ void hash(char array[], int counter, char chash[]){
         
     }
 	
-	printf("\n\nPreFinal Hash = %s\n\n",chash);
+	int mo;
+	for(mo = 0; mo < 16; mo++){
+		HASH[mo] = chash[mo];
+	}
+	
+	printf("\n\nPreFinal Hash = %s\n\n",HASH);
 	
 }
 
@@ -166,9 +199,7 @@ bool checkLetter(char letter){
 void randomGarbage(char garbage[]){
 	char randomBullshit[] = "0123456789ABCDEF";
 	char num[] = "0123456789";
-	
-	
-	
+
 	int i;
 	for(i=0; i < 10; ){
 		garbage[i] = randomBullshit[rand()%strlen(randomBullshit)];
@@ -178,8 +209,6 @@ void randomGarbage(char garbage[]){
 		}
 		i++;
 	}
-	
-	
 }
 
 //Put hash in file
@@ -192,26 +221,7 @@ void allinone(char finalarray[], char hash[], char ogArray[], char garbage[]){
 
 //Encryption
 	//Giants function
-/*void swap(char io[], int num, int size){
-	while(size % num != 0){
-		strcat(io, " ");
-		size++;
-	}
-	printf("Contents 0: %s\n", io);
-	int i,j;
-	char temp;
-	for(i=0; i<size/num; i+=num){
-		for(j=0; j<num; j++){
-			temp = io[j+i];
-			io[i+j] = io[size - num + j - i]; 
-			io[size - num + j - i] = temp;	
-		}
-	}
-	printf("Contents 1: %s\n", io);
-}*/
-
-void swapKout (char P[], int n1, int n2, int hashN)
-{
+void swapKout (char P[], int n1, int n2, int hashN){
     char temp;
     while (n1 < n2)
 	{
@@ -223,8 +233,7 @@ void swapKout (char P[], int n1, int n2, int hashN)
     }
 }
 
-void swap (char P[], int hashN)
-{
+void swap (char P[], int hashN){
 	int messageL = strlen(P);
 	int repeats = messageL / hashN;	
 	
@@ -321,7 +330,7 @@ void getHashFromFile(char file[], char hash[], int sizeofHash){
 void removeGarbage(char arr[], int sizeOfGar, int sizeOfHash){
 	char arr1[MAX];
 	int i, j = 0;
-	for(i = sizeOfHash; i < strlen(arr) - sizeOfGar; i++){
+	for(i = sizeOfHash; i < strlen(arr) - sizeOfGar - 1; i++){
 		arr1[j] = arr[i];
 		j++;
 	}
@@ -378,8 +387,6 @@ void hexToString(char hex[]){
   	strcpy(hex, string);
 }
 	
-	//Giants function decrypt
-
 
 //Verify
 bool stringsSame(char str1[], char str2[]){
@@ -404,7 +411,6 @@ void writefile(char array[], char filename[]){
 		fclose(fp);
 	}
 
-
 void encryption(char file[]){
 	int counter = fcounter(file) + 8;
 	char contents[counter];
@@ -413,11 +419,12 @@ void encryption(char file[]){
 	printf("Contents: %s\n", contents);
 	printf("1\n");
 	
-//	char Hash[16];
-	char Hash[] = "0123456789ABCDEF";
+	//char Hash[16];
+	char Hash[] = "3333242532058932";
+	//char Hash[] = "0123456789ABCDEF";
 	char temp[counter];
 	strcpy(temp, contents);
-//	hash(temp, counter, Hash);
+	//hash(temp, counter, Hash);
 	printf("\nHash: %s\n", Hash);
 	
 	
@@ -436,7 +443,7 @@ void encryption(char file[]){
 	
 	printf("\n==========================================================\n");
 	
-	caesarsCypherEncr(hex, 2); //Dokimh
+	caesarsCypherEncr(hex, find_first_number(Hash)); //Dokimh
 	printf("Contents after caesars: %s", hex);
 	printf("\n==========================================================\n");
 	
@@ -446,7 +453,9 @@ void encryption(char file[]){
 	printf("Final form: %s", finalForm);
 	printf("\n==========================================================\n");
 	
+	
 	writefile(finalForm, "ogencryptedfile.txt");
+	
 }
 
 void decryption(char file[]){	
@@ -464,10 +473,12 @@ void decryption(char file[]){
 	removeGarbage(encrCont, 10, 16);
 	printf("Contents after removal: %s", encrCont);
 	
+	printf("\n\nFind num: %d\n\n", find_first_number(Hash));
 	caesarsCypherDecr(encrCont, find_first_number(Hash));
 	printf("\n\nContents after caesars: %s", encrCont);
 	
 	hexToString(encrCont);
+	//stringToHex(encrCont, encrCont);
 	printf("\n\nContents after hex: %s", encrCont);
 	
 	swap(encrCont, find_first_number(Hash));
@@ -482,7 +493,10 @@ void decryption(char file[]){
 
 //Menu
 void mainMenu(){
-	printf("\n-Main Menu-\n");
+	char file[30];
+	askFile(file);
+	
+	//printf("\n-Main Menu-\n");
 	printf("1. Encrypt\n");
 	printf("2. Decrypt\n");
 	printf("3. Exit\n");
@@ -497,10 +511,10 @@ void mainMenu(){
 	
 	switch(choice){
 		case 1:
-			
+			encryption(file);
 			break;
 		case 2:
-			
+			decryption("ogencryptedfile.txt");
 			break;
 		case 3:
 			printf("\n\nBye!\n\n");
@@ -532,45 +546,17 @@ int main(){
 	
 	
 	srand(time(NULL));
-	char file[30];
 	
-	//printf("Give the name of the file: ");
-	//scanf("%s", file);
-	encryption("file.txt");
-	printf("\n\n\nDecryption:\n\n");
+	
+	
+	//mainMenu();
+	char file[30];
+	askFile(file);
+	encryption(file);
 	decryption("ogencryptedfile.txt");
 	
-	printf("\n==========================================================\n");
-	//Decryption
-	/*char encrContents[counter+26];
-	char Hash;
-	
-	getHashFromFile("ogencryptedfile.txt", realHash, 16);
-	printf("Hash: %s", Hash);
-	
-	getWholeFile("ogencryptedfile.txt", encrContents);
-	printf("\n\nContents: %s", encrContents);
-	
-	createRealFile("encryptedFile.txt", encrContents, 16, 10, fileSize(encrContents), realFileSize(encrContents, 16, 10));
-	
-	//Caesars cypher Decrypt
-	caesarsCypherDecr(encrContents, find_first_number(realHash));
-	
-	//Hex Decrypt
-	hexToString(stringToFinalDecr, encrContents);
-	
-	//Giants Decrypt
-	
-	
-	//Generate Hash
-	char hashToComp[];
-	hash(finalcontents, MAX, hashToComp);
-	
-	//Verify
-	verify(realHash, hashToComp);
-	
-	//Create decrypted file
-	writefile(finalcontents, decryptedFile);*/
+
+
 	
 	system("pause");
 	return 0;
