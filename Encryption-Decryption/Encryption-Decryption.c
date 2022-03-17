@@ -4,8 +4,37 @@
 #include <string.h>
 #include <stdbool.h>
 #include <math.h>
+#include <time.h>
 
 #define MAX 500
+
+bool checkName(char name[]){
+	char characters[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_,!@#$%^&*()+=;:{[]}";
+	
+	int i,j, count;
+	for(i=0; i<strlen(name); i++){
+		for(j=0; j<strlen(characters); j++){
+			if(name[i] == characters[j])
+				count++;
+		}
+	}
+	
+	if(count == strlen(name))
+		return true;
+	else
+		return false;
+}
+
+
+void askFile(char file[]){
+	do{
+		printf("Give file name: ");
+		scanf("%s", file);
+	}
+	while(!checkName(file)); // && !checkName(file)!checkTXT(file)
+	
+	strcat(file, ".txt");
+}
 
 //Get file
 int fcounter(char filename[50]){
@@ -31,11 +60,11 @@ int fcounter(char filename[50]){
 void getWholeFile(char file[], char buffer[]){
 	FILE *fp;
     fp = fopen(file, "rb");
-	int maxSize = 200;//fcounter(file);
+	//int maxSize = 200;//fcounter(file);
 	
 	size_t i;
 
-	for (i = 0; i < maxSize; ++i){
+	for (i = 0; i < MAX; ++i){
     	int c = getc(fp);
     	
     	if (c == EOF){
@@ -52,7 +81,7 @@ void getWholeFile(char file[], char buffer[]){
 //create hash
 int find_first_number(char string[]){
 	int n = 16;//sizeof(string);
-	printf("Size of string: %d\n",n);
+	//printf("Size of string: %d\n",n);
 	char numbers[] = "23456789";
 
 	//int finall_num = 3;
@@ -67,7 +96,8 @@ int find_first_number(char string[]){
 	}
 }
 
-void hash(char array[], int counter, char chash[]){
+void hash(char array[], int counter, char HASH[]){
+	char chash[20];
 	char list[100];
 	int intlist[100];
 	int lcounter=0;
@@ -132,29 +162,113 @@ void hash(char array[], int counter, char chash[]){
 	snprintf(chash, 30, "%f", hash);
 	chash[strcspn(chash, ".")] = 0;
 	
-	
 	int pos1[] = {1,3,4,6,8,0};
 	int pos2[] = {6,8,1,3,4,9};
-	char swap;
+	int w,m;
+	char t;
+    for (int o = 0; o < 6; o++) {
+    	
+        w = pos2[o];
+        m = pos1[o];
+        
+        t = chash[w];
+        chash[w] = chash[m];
+        chash[m] = t;
+        
+    }
 	
-	int b;
-	for(b=0;b<7;b++){
-		swap = chash[pos1[b]];
-		chash[pos1[b]] = chash[pos2[b]];
-		chash[pos2[b]] = swap;
+	int mo;
+	for(mo = 0; mo < 16; mo++){
+		HASH[mo] = chash[mo];
 	}
-	//printf("\n\nPreFinal Hash = %s\n\n",chash);	
+	
+	printf("\n\nPreFinal Hash = %s\n\n",HASH);
+	
+}
+
+bool checkLetter(char letter){
+	char letters[] = "ABCDEF";
+	int i;
+	for(i=0;i<strlen(letters);i++){
+		if(letter == letters[i])
+			return true;
+	}
+	return false;
+}
+
+void randomGarbage(char garbage[]){
+	char randomBullshit[] = "0123456789ABCDEF";
+	char num[] = "0123456789";
+
+	int i;
+	for(i=0; i < 10; ){
+		garbage[i] = randomBullshit[rand()%strlen(randomBullshit)];
+		if(checkLetter(garbage[i])){
+			garbage[i+1] = num[rand()%strlen(num)];
+			i++;
+		}
+		i++;
+	}
 }
 
 //Put hash in file
-void allinone(char finalarray[], char hash[], char ogArray[]){
-	strcpy(finalarray,"");
-	strcat(finalarray,hash);
-	strcat(finalarray,ogArray);
+void allinone(char finalarray[], char hash[], char ogArray[], char garbage[]){
+	strcpy(finalarray, "");
+	strcat(finalarray, hash);
+	strcat(finalarray, ogArray);
+	strcat(finalarray, garbage);
 }
 
 //Encryption
 	//Giants function
+void swapKout (char P[], int n1, int n2, int hashN){
+    char temp;
+    while (n1 < n2)
+	{
+	    temp = P[n2]; 
+	    P[n2] = P[n1];
+	    P[n1] = temp;
+	    n2--;
+	    n1++;
+    }
+}
+
+void swap (char P[], int hashN){
+	int messageL = strlen(P);
+	int repeats = messageL / hashN;	
+	
+	if (messageL % hashN == 0 || messageL % hashN == 1)
+	{
+		int n1 = 0;
+	    int n2 = hashN - 1;
+	    int counter = 0;
+	do
+	{
+		swapKout(P, n1, n2, hashN);
+		n1 = n1 + hashN;
+		n2 = n2 + hashN;
+		counter++;
+	}
+	while (counter < repeats);
+    }
+	
+	else
+	{
+		int n1 = 0;
+	    int n2 = hashN - 1;
+	    int counter = 0;
+	do
+	{
+		swapKout(P, n1, n2, hashN);
+		n1 = n1 + hashN;
+		n2 = n2 + hashN;
+		counter++;
+	}
+	while (counter < repeats);
+	n2 = messageL - 1;
+	swapKout (P, n1, n2, messageL % hashN);
+	}
+}
 	
 	//Hex
 void stringToHex(char string[], char hex[]){
@@ -162,31 +276,36 @@ void stringToHex(char string[], char hex[]){
 
   	int i, j = 0;
 	for (i = 0; i < len; ++i){
-		sprintf(hex + j, "%02x", string[i] & 0xff);
+		sprintf(hex + j, "%02X", string[i] & 0xff);
 		j += 2;
 	}
+}
+
+int f(int x, int y){
+	return x*y+x+y;
 }
 
 	//caesars cypher
 void caesarsCypherEncr(char io[], int num){ //io -> input / output
 	char hexChars[] = "0123456789ABCDEF";
 	
-	int i, j;
+	int i, j, a;
     for (i = 0; i < strlen(io); i++){
-        for (j = 0; j < strlen(io);){  //Psaxnei ton characthra sto hexChars
+        a = f(num, i)%16+1;
+		for (j = 0; j < strlen(io);){  //Psaxnei ton characthra sto hexChars
             while (io[i] != hexChars[j]){        	
 				j++;
             }
             break;
         }
         
-        if(j + num >= strlen(hexChars)){  //Gia otan einai sto telos tou string, na phgainei apo thn arxh
+        if(j + a >= strlen(hexChars)){  //Gia otan einai sto telos tou string, na phgainei apo thn arxh
             j -= strlen(hexChars);
-            io[i] = hexChars[j + num];
+            io[i] = hexChars[j + a];
         }
         //else if()
         else{
-            io[i] = hexChars[j + num];
+            io[i] = hexChars[j + a];
             j = 0;
         }
     }
@@ -207,6 +326,16 @@ void getHashFromFile(char file[], char hash[], int sizeofHash){
    
    fclose(fp);
 }
+
+void removeGarbage(char arr[], int sizeOfGar, int sizeOfHash){
+	char arr1[MAX];
+	int i, j = 0;
+	for(i = sizeOfHash; i < strlen(arr) - sizeOfGar - 1; i++){
+		arr1[j] = arr[i];
+		j++;
+	}
+	strcpy(arr, arr1);
+}
 	
 int fileSize(char contents[]){
 	return strlen(contents);
@@ -215,30 +344,16 @@ int fileSize(char contents[]){
 int realFileSize(char contents[], int sizeofHash, int sizeofGarbage){
 	return fileSize(contents) - sizeofHash - sizeofGarbage;
 }
-
-void createRealFile(char newFileName[], char ogFileContents[], int sizeofHash, int sizeofGarbage, int sizeofFile, int sizeofRealFile){
-	FILE *nfp = fopen(newFileName, "w+");
-	
-	char newFileContents[MAX];
-	
-	int i,j=0;
-	for(i = sizeofHash; i < sizeofFile - sizeofGarbage; i++){
-		newFileContents[j] = ogFileContents[i];
-		j++;
-	}
-	
-	printf("\n\nNew Contents: %s", newFileContents);
-	fputs(newFileContents, nfp); //Bazei mono to alhthino periexomeno se ena neo arxeio wste na ginei to Decryption
-	
-	fclose(nfp);
-}
 	
 	//caesars cypher decrypt
 void caesarsCypherDecr(char io[], int num){ //io -> input / output
-	char hexChars[] = {"0123456789ABCDEF"};
+	char hexChars[] = "0123456789ABCDEF";
 	
-	int i, j;
+	
+	
+	int i, j, a;
     for (i = 0; i < strlen(io); i++){
+    	a = f(num, i)%16+1;
         for (j = 0; j < strlen(io);){  //Psaxnei ton characthra sto hexChars
             while (io[i] != hexChars[j]){
                 j++;
@@ -246,33 +361,32 @@ void caesarsCypherDecr(char io[], int num){ //io -> input / output
             break;
         }
         
-        if(j < num){  //Gia otan einai sthn arxh tou string, na phgainei sto telos
+        if(j < a){  //Gia otan einai sthn arxh tou string, na phgainei sto telos
             j += strlen(hexChars);
-            io[i] = hexChars[j - num];
+            io[i] = hexChars[j - a];
         }
         else{
-            io[i] = hexChars[j - num];
+            io[i] = hexChars[j - a];
             j = 0;
         }
     }
 }
 	
 	//Hex decrypt
-void hexToString(char string[], char hex[]){
+void hexToString(char hex[]){
 	int len = strlen(hex);
-  	
+  	char string[MAX];
   	int i=0, j=0;
-	for (j = 0; j < len; j += 2) {
+	for (j = 0; j < len-1; j += 2) {
     	int val[1];
-    	sscanf(hex + j, "%2x", val);
+    	sscanf(hex + j, "%2X", val);
     	string[i] = val[0];
     	string[i + 1] = '\0';
     	++i;
   	}
+  	strcpy(hex, string);
 }
 	
-	//Giants function decrypt
-
 
 //Verify
 bool stringsSame(char str1[], char str2[]){
@@ -297,9 +411,92 @@ void writefile(char array[], char filename[]){
 		fclose(fp);
 	}
 
+void encryption(char file[]){
+	int counter = fcounter(file) + 8;
+	char contents[counter];
+	printf("0\n");
+	getWholeFile(file, contents);
+	printf("Contents: %s\n", contents);
+	printf("1\n");
+	
+	//char Hash[16];
+	char Hash[] = "3333242532058932";
+	//char Hash[] = "0123456789ABCDEF";
+	char temp[counter];
+	strcpy(temp, contents);
+	//hash(temp, counter, Hash);
+	printf("\nHash: %s\n", Hash);
+	
+	
+	
+	printf("\n==========================================================\n");
+	printf("First Hash Num: %d\n", find_first_number(Hash));
+	printf("Contents before swap: %s\n", contents);
+	swap(contents, find_first_number(Hash)); //Dokimh
+	printf("Contents after swap: %s", contents);
+	
+	printf("\n==========================================================\n");
+	
+	char hex[MAX];
+	stringToHex(contents, hex);
+	printf("Contents after hex: %s", hex);
+	
+	printf("\n==========================================================\n");
+	
+	caesarsCypherEncr(hex, find_first_number(Hash)); //Dokimh
+	printf("Contents after caesars: %s", hex);
+	printf("\n==========================================================\n");
+	
+	char garbage[10], finalForm[MAX];
+	randomGarbage(garbage);
+	allinone(finalForm, Hash, hex, garbage);
+	printf("Final form: %s", finalForm);
+	printf("\n==========================================================\n");
+	
+	
+	writefile(finalForm, "ogencryptedfile.txt");
+	
+}
+
+void decryption(char file[]){	
+	char temp[MAX];
+	getWholeFile(file, temp);
+	int size = strlen(temp);
+	char encrCont[size];
+	strcpy(encrCont, temp);
+	
+	char Hash[16];
+	getHashFromFile(file, Hash, 16);
+	printf("Hash: %s\n", Hash);
+	
+	//char e1[size-26];
+	removeGarbage(encrCont, 10, 16);
+	printf("Contents after removal: %s", encrCont);
+	
+	printf("\n\nFind num: %d\n\n", find_first_number(Hash));
+	caesarsCypherDecr(encrCont, find_first_number(Hash));
+	printf("\n\nContents after caesars: %s", encrCont);
+	
+	hexToString(encrCont);
+	//stringToHex(encrCont, encrCont);
+	printf("\n\nContents after hex: %s", encrCont);
+	
+	swap(encrCont, find_first_number(Hash));
+	printf("\n\nContents after swap: %s", encrCont);
+	
+	/*char filename[50];
+	printf("Give the name of the file: ");
+	scanf("%s", filename);*/
+	writefile(encrCont, "newFile.txt");
+	
+}
+
 //Menu
 void mainMenu(){
-	printf("\n-Main Menu-\n");
+	char file[30];
+	askFile(file);
+	
+	//printf("\n-Main Menu-\n");
 	printf("1. Encrypt\n");
 	printf("2. Decrypt\n");
 	printf("3. Exit\n");
@@ -314,10 +511,10 @@ void mainMenu(){
 	
 	switch(choice){
 		case 1:
-			
+			encryption(file);
 			break;
 		case 2:
-			
+			decryption("ogencryptedfile.txt");
 			break;
 		case 3:
 			printf("\n\nBye!\n\n");
@@ -336,8 +533,7 @@ int main(){
 	file -> Onoma arxeiou gia encryption
 	counter -> Arithmos xarakthrwn sto parapanw arxeio
 	Hash -> Hash pou dhmiourgeitai sto encryption
-	arrToEncrypt -> Periexomeno arxeiou me thn Hash kollhmenh sthn arxh tou
-	
+	garbage ->Skoupidia sto telos tou arxeiou
 	
 	-Decryption-
 	encrContents -> Arxika periexomena tou encrypted arxeiou me hash kai skoupidia
@@ -349,69 +545,19 @@ int main(){
 	*/
 	
 	
+	srand(time(NULL));
 	
+	
+	
+	//mainMenu();
 	char file[30];
-	strcpy(file, "file.txt");
-	int counter = fcounter(file);
-	char contents[counter];
-	getWholeFile(file, contents);
-	printf("%s", contents);
+	askFile(file);
+	encryption(file);
+	decryption("ogencryptedfile.txt");
+	printf("\n\n\n");
 	
-	printf("\n==========================================================\n");
-	
-	char Hash[16];
-	hash(contents, MAX, Hash);
-	printf("Hash: %s\n\n", Hash);
-	
-	printf("\n==========================================================\n");
-	
-	char arrToEncrypt[counter+16];
-	allinone(arrToEncrypt, Hash, contents);
-	printf("%s\n", arrToEncrypt);
-	
-	printf("\n==========================================================\n");
-	//Encryption
-	//Giants Encrypt
-	
-	//Hex Encrypt
-	stringToHex();
-	
-	//Caesars cypher Encrypt
-	caesarsCypherEncr();
-	
-	writefile();
-	
-	printf("\n==========================================================\n");
-	//Decryption
-	char encrContents[counter+26];
-	char realHash;
-	
-	getHashFromFile("ogencryptedfile.txt", realHash, 16);
-	printf("Hash: %s", realHash);
-	
-	getWholeFile("ogencryptedfile.txt", encrContents);
-	printf("\n\nContents: %s", encrContents);
-	
-	createRealFile("encryptedFile.txt", encrContents, 16, 10, fileSize(encrContents), realFileSize(encrContents, 16, 10));
-	
-	//Caesars cypher Decrypt
-	caesarsCypherDecr(encrContents, find_first_number(realHash));
-	
-	//Hex Decrypt
-	hexToString(stringToFinalDecr, encrContents);
-	
-	//Giants Decrypt
-	
-	
-	//Generate Hash
-	char hashToComp[];
-	hash(finalcontents, MAX, hashToComp);
-	
-	//Verify
-	verify(realHash, hashToComp);
-	
-	//Create decrypted file
-	writefile(finalcontents, decryptedFile);
+
+
 	
 	system("pause");
 	return 0;
