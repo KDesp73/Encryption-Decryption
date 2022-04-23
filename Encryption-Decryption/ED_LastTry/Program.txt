@@ -1,0 +1,8 @@
+-Program-
+
+Encryption:
+1) Hash
+2) Swap
+3) Hex
+4) Caesar's Cypher
+5) Garbage
