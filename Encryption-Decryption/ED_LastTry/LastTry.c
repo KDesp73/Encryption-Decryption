@@ -5,6 +5,9 @@
 #include <math.h>
 #include <time.h>
 
+#include "Auxiliary_functions.c"
+//#include "ED_functions.c"
+
 #define MAX 1000
 #define HASHSIZE 4
 #define GARSIZE 10
@@ -28,50 +31,7 @@ void h2s();
 //Áuxiliary functions
 void getTextFILE();
 void getTextSTRING();
-void putTextSTRING();
-void putTextFILE();
 
-void getFile(char file[], char buffer[]){
-	FILE *fp;
-    fp = fopen(file, "rb");
-	size_t i;
-	
-	for (i = 0; i < MAX; ++i){
-    	int c = getc(fp);
-    	
-    	if (c == EOF){
-        	buffer[i] = 0x00;
-        	break;
-    	}	
-    	buffer[i] = c;
-	}
-    fclose(fp);
-}
-bool checkName(char name[]){
-	char characters[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_,!@#$%^&*()+=;:{[]}";
-	
-	int i,j, count;
-	for(i=0; i<strlen(name); i++){
-		for(j=0; j<strlen(characters); j++){
-			if(name[i] == characters[j])
-				count++;
-		}
-	}
-	
-	if(count == strlen(name))
-		return true;
-	else
-		return false;
-}
-void askFile(char file[]){
-	do{
-		printf("Give file name: ");
-		scanf("%s", file);
-	}
-	while(!checkName(file)); // && !checkName(file)!checkTXT(file)
-	
-	strcat(file, ".txt");
-}
 void chooseInput(char buffer[]){
 	int choice;
 	printf("\nSelect Input Method: [1]File [2]Text\n");
@@ -92,108 +52,6 @@ void chooseInput(char buffer[]){
 			printf("chooseInput -> DO-WHILE -> CHOICE");
 			exit(1);
 	}
-}
-void digits(int num, int digits[]){
-	int temp, numlength;
-	int i, j, k;
-	char snum[50];
-	
-	itoa(num, snum, 10);
-	
-	numlength = strlen(snum);
-	
-	i = numlength;
-	while(num != 0){
-		j = numlength - i;
-		
-		temp = num / (int)pow((double)10, (double)i-1);
-		num = num % (int)pow((double)10, (double)i-1);
-		
-		digits[j] = temp;
-		i--;
-	}
-}
-int hashNum(int hash){
-	int digitsArr[MAX];
-	digits(hash, digitsArr);
-	
-	for(int i; sizeof(digitsArr)/sizeof(int); i++){
-		if(digitsArr[i] <= 1) continue;
-		return digitsArr[i];
-	}
-}
-void swapKout (char P[], int n1, int n2, int hashN){
-    char temp;
-    while (n1 < n2)
-	{
-	    temp = P[n2]; 
-	    P[n2] = P[n1];
-	    P[n1] = temp;
-	    n2--;
-	    n1++;
-    }
-}
-int f(int x, int y){
-	return x*y+x+y;
-}
-void allinone(char finalarray[], char hash[], char ogArray[], char garbage[]){
-	memset(finalarray, 0, strlen(finalarray));
-	strncat(finalarray, hash, HASHSIZE);
-	strncat(finalarray, ogArray, strlen(ogArray));
-	strncat(finalarray, garbage, GARSIZE);
-}
-void getHash(char buffer[], char hash[], int sizeofHash){
-	for(int i = 0; i < sizeofHash; i++){
-		hash[i] = buffer[i];
-	}
-}
-void removeGarbage(char arr[], int sizeOfGar, int sizeOfHash){
-	char arr1[MAX];
-	int j = 0;
-	for(int i = sizeOfHash; i < strlen(arr) - sizeOfGar - 1; i++){
-		arr1[j] = arr[i];
-		j++;
-	}
-	strcpy(arr, arr1);
-}
-bool checkLetter(char letter){
-	char letters[] = "ABCDEF";
-	int i;
-	for(i=0;i<strlen(letters);i++){
-		if(letter == letters[i])
-			return true;
-	}
-	return false;
-}
-void garbageGenerator(char garbage[]){
-	char hexChars[] = "0123456789ABCDEF";
-	char num[] = "0123456789";
-
-	for(int i = 0; i < GARSIZE; i++){
-		garbage[i] = hexChars[rand()%strlen(hexChars)];
-		if(checkLetter(garbage[i])){
-			garbage[i+1] = num[rand()%strlen(num)];
-		}
-	}
-}
-void cleanBuffer(char buffer[]){
-	char temp[MAX];
-	int i, j = 0;
-	for(i = HASHSIZE; i < strlen(buffer) - GARSIZE - 1; i++){
-		temp[j] = buffer[i];
-		j++;
-	}
-	strcpy(buffer, temp);
-}
-bool isAcceptableSize(char buffer[]){
-	if(strlen(buffer) < HASHSIZE + GARSIZE) return false;
-	return true;
-}
-void writeFile(char buffer[], char filename[]){
-	FILE *fp;
-	fp = fopen(filename, "w+");
-	fputs(buffer, fp);
-	fclose(fp);
 }
 void chooseOutput(char _decrypted[], char msg[]){
 	int choice;
@@ -225,6 +83,7 @@ void chooseOutput(char _decrypted[], char msg[]){
 	memset(filename, 0, strlen(filename));
 }
 
+
 //========MAIN========
 int main(){
 	srand(time(NULL));
@@ -246,18 +105,18 @@ void encr(char buffer[], char _encrypted[]){
 	printf("\n=======Encryption=======\n");
 	memset(buffer, 0, strlen(buffer));
 	chooseInput(buffer);
-	printf("\nInitial text:\n%s\n", buffer);
+	//printf("\nInitial text:\n%s\n", buffer);
 	
 	int HASH = createHash(buffer);
-	printf("HASH NUM: %d", hashNum(HASH));
+	//printf("HASH NUM: %d", hashNum(HASH));
 	swap(buffer, hashNum(HASH));
-	printf("\nSwap text: %s\n", buffer);
+	//printf("\nSwap text: %s\n", buffer);
 	
 	s2h(buffer);
-	printf("\nHex text: %s\n", buffer);	
+	//printf("\nHex text: %s\n", buffer);	
 	
 	ccEncr(buffer, hashNum(HASH));
-	printf("\nCCE text: %s\n", buffer);
+	//printf("\nCCE text: %s\n", buffer);
 	
 	//Add Hash & Garbage
 	char sHash[16], garbage[GARSIZE];
@@ -285,13 +144,13 @@ void decr(char buffer[], char _decrypted[]){
 	int HASH = atoi(shash);
 	
 	ccDecr(buffer, hashNum(HASH));
-	printf("\nCCD text: %s\n", buffer);
+	//printf("\nCCD text: %s\n", buffer);
 	
 	h2s(buffer);
-	printf("\nHEX: %s", buffer);
+	//printf("\nHEX: %s", buffer);
 	
 	swap(buffer, hashNum(HASH));
-	printf("\nSwap: %s", buffer);
+	//printf("\nSwap: %s", buffer);
 	
 	//Generate hash
 	//Validate
