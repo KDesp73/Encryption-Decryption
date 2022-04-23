@@ -84,16 +84,39 @@ void chooseOutput(char _decrypted[], char msg[]){
 }
 
 
+void menu(char _encr[], char _decr[]){
+	printf("\n\n\t\t::::Menu::::\n");
+	printf("Select [1]Encryption [2]Decryption [3]Exit\n");
+	int choice;
+	do{
+		printf("> ");
+		scanf("%d", &choice);
+	}
+	while(choice < 1 || choice > 3);
+	
+	char buffer[MAX];
+	memset(buffer, 0, strlen(buffer));
+	switch(choice){
+		case 1:
+			encr(buffer, _encr);
+			menu(_encr, _decr);
+		case 2:
+			decr(buffer, _decr);
+			menu(_encr, _decr);
+		case 3:
+			exit(0);
+		default:
+			printf("WTF");
+	}
+}
+
 //========MAIN========
 int main(){
 	srand(time(NULL));
-	char buffer[MAX];
-	char temp[MAX];
+	char _encr[MAX];
+	char _decr[MAX];
 	
-	encr(buffer, temp);
-	memset(buffer, 0, strlen(buffer));
-	memset(temp, 0, strlen(temp));
-	decr(buffer, temp);
+	menu(_encr, _decr);
 	
 	system("pause");
 	return 0;
