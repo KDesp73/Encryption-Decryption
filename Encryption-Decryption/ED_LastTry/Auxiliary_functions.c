@@ -4,11 +4,17 @@
 #include <stdbool.h>
 #include <math.h>
 #include <time.h>
-
+#include <unistd.h>
 
 #define MAX 1000
 #define HASHSIZE 4
 #define GARSIZE 10
+
+#ifdef WIN32
+#include <io.h>
+#define F_OK 0
+#define access _access
+#endif
 
 
 void getFile(char file[], char buffer[]){
@@ -27,6 +33,7 @@ void getFile(char file[], char buffer[]){
 	}
     fclose(fp);
 }
+
 bool checkName(char name[]){
 	char characters[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_,!@#$%^&*()+=;:{[]}";
 	
@@ -38,20 +45,19 @@ bool checkName(char name[]){
 		}
 	}
 	
-	if(count == strlen(name))
-		return true;
-	else
-		return false;
+	return count == strlen(name);
 }
-void askFile(char file[]){
+
+void askFile(char filename[]){
 	do{
-		printf("Give file name: ");
-		scanf("%s", file);
+		printf("Give filename name: ");
+		scanf("%s", filename);
 	}
-	while(!checkName(file)); // && !checkName(file)!checkTXT(file)
+	while(!checkName(filename)); // && !checkName(filename)!checkTXT(filename)
 	
-	strcat(file, ".txt");
+	strcat(filename, ".txt");
 }
+
 void digits(int num, int digits[]){
 	int temp, numlength;
 	int i, j, k;
@@ -72,6 +78,7 @@ void digits(int num, int digits[]){
 		i--;
 	}
 }
+
 int hashNum(int hash){
 	int digitsArr[MAX];
 	digits(hash, digitsArr);
@@ -81,6 +88,7 @@ int hashNum(int hash){
 		return digitsArr[i];
 	}
 }
+
 void swapKout (char P[], int n1, int n2, int hashN){
     char temp;
     while (n1 < n2)
@@ -92,20 +100,24 @@ void swapKout (char P[], int n1, int n2, int hashN){
 	    n1++;
     }
 }
+
 int f(int x, int y){
 	return x*y+x+y;
 }
+
 void allinone(char finalarray[], char hash[], char ogArray[], char garbage[]){
 	memset(finalarray, 0, strlen(finalarray));
 	strncat(finalarray, hash, HASHSIZE);
 	strncat(finalarray, ogArray, strlen(ogArray));
 	strncat(finalarray, garbage, GARSIZE);
 }
+
 void getHash(char buffer[], char hash[], int sizeofHash){
 	for(int i = 0; i < sizeofHash; i++){
 		hash[i] = buffer[i];
 	}
 }
+
 void removeGarbage(char arr[], int sizeOfGar, int sizeOfHash){
 	char arr1[MAX];
 	int j = 0;
@@ -115,6 +127,7 @@ void removeGarbage(char arr[], int sizeOfGar, int sizeOfHash){
 	}
 	strcpy(arr, arr1);
 }
+
 bool checkLetter(char letter){
 	char letters[] = "ABCDEF";
 	int i;
@@ -124,6 +137,7 @@ bool checkLetter(char letter){
 	}
 	return false;
 }
+
 void garbageGenerator(char garbage[]){
 	char hexChars[] = "0123456789ABCDEF";
 	char num[] = "0123456789";
@@ -135,6 +149,7 @@ void garbageGenerator(char garbage[]){
 		}
 	}
 }
+
 void cleanBuffer(char buffer[]){
 	char temp[MAX];
 	int i, j = 0;
@@ -144,10 +159,12 @@ void cleanBuffer(char buffer[]){
 	}
 	strcpy(buffer, temp);
 }
+
 bool isAcceptableSize(char buffer[]){
 	if(strlen(buffer) < HASHSIZE + GARSIZE) return false;
 	return true;
 }
+
 void writeFile(char buffer[], char filename[]){
 	FILE *fp;
 	fp = fopen(filename, "w+");
@@ -155,4 +172,22 @@ void writeFile(char buffer[], char filename[]){
 	fclose(fp);
 }
 
-
+bool checkInput(char buffer[]){
+	return strlen(buffer) > 2; //it's... stable
+}
+/*
+int main(){
+	char buffer[MAX];
+	for(int i = 0; i < 10; i++){
+		printf("\nText: ");
+		scanf("%s", buffer);
+		
+		if(strlen(buffer) > 1) printf("TRUE\n");
+		else printf("\nFALSE\n");
+	}
+	
+	
+	system("pause");
+	return 0;
+}
+*/

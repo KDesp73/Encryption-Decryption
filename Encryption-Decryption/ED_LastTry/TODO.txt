@@ -1,0 +1,5 @@
+TODO:
+
+1) Hash generator
+2) Checks when needed
+3) 

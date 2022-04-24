@@ -6,7 +6,6 @@
 #include <time.h>
 
 #include "Auxiliary_functions.c"
-//#include "ED_functions.c"
 
 #define MAX 1000
 #define HASHSIZE 4
@@ -28,7 +27,7 @@ void ccDecr();
 void h2s();
 //swap again
 
-//Áuxiliary functions
+//Auxiliary functions
 void getTextFILE();
 void getTextSTRING();
 
@@ -40,7 +39,7 @@ void chooseInput(char buffer[]){
 		scanf("%d", &choice);
 	}
 	while(choice < 1 || choice > 2);
-	
+
 	switch(choice){
 		case 1:
 			getTextFILE(buffer);
@@ -53,7 +52,7 @@ void chooseInput(char buffer[]){
 			exit(1);
 	}
 }
-void chooseOutput(char _decrypted[], char msg[]){
+void chooseOutput(char out[], char msg[]){
 	int choice;
 	printf("Select Output Method: [1]Create File [2]Print text [3]Both\n");
 	do{
@@ -61,21 +60,21 @@ void chooseOutput(char _decrypted[], char msg[]){
 		scanf("%d", &choice);
 	}
 	while(choice < 1 || choice > 3);
-	
+
 	char filename[50];
 	switch(choice){
 		case 1:
 			askFile(filename);
-			writeFile(_decrypted, filename);
+			writeFile(out, filename);
 			break;
 		case 2:
-			printf("%s Text: %s", msg, _decrypted);
+			printf("%s Text:\n%s", msg, out);
 			break;
 		case 3:
-			printf("%s Text: %s\n", msg, _decrypted);
+			printf("%s Text:\n%s\n", msg, out);
 			askFile(filename);
-			writeFile(_decrypted, filename);
-			break;	
+			writeFile(out, filename);
+			break;
 		default:
 			printf("OUTPUT -> DO-WHILE -> CHOICE");
 			exit(1);
@@ -83,17 +82,16 @@ void chooseOutput(char _decrypted[], char msg[]){
 	memset(filename, 0, strlen(filename));
 }
 
-
 void menu(char _encr[], char _decr[]){
 	printf("\n\n\t\t::::Menu::::\n");
-	printf("Select [1]Encryption [2]Decryption [3]Exit\n");
+	printf("\tSelect [1]Encryption [2]Decryption\n\t       [3]About [4]Exit\n");
 	int choice;
 	do{
-		printf("> ");
+		printf("\t> ");
 		scanf("%d", &choice);
 	}
-	while(choice < 1 || choice > 3);
-	
+	while(choice < 1 || choice > 4);
+
 	char buffer[MAX];
 	memset(buffer, 0, strlen(buffer));
 	switch(choice){
@@ -104,6 +102,10 @@ void menu(char _encr[], char _decr[]){
 			decr(buffer, _decr);
 			menu(_encr, _decr);
 		case 3:
+			getFile("about.txt", buffer);
+			printf("\n%s\n", buffer);
+			menu(_encr, _decr);
+		case 4:
 			exit(0);
 		default:
 			printf("WTF");
@@ -115,13 +117,20 @@ int main(){
 	srand(time(NULL));
 	char _encr[MAX];
 	char _decr[MAX];
-	
+
+	printf("=============ENCRYPTION-DECRYPTION=============\n\n");
 	menu(_encr, _decr);
-	
+
+
 	system("pause");
 	return 0;
 }
 //========END OF MAIN========
+
+
+int createHash(char buffer[]){
+	return 1234;
+}
 
 
 void encr(char buffer[], char _encrypted[]){
@@ -129,57 +138,57 @@ void encr(char buffer[], char _encrypted[]){
 	memset(buffer, 0, strlen(buffer));
 	chooseInput(buffer);
 	//printf("\nInitial text:\n%s\n", buffer);
-	
+
 	int HASH = createHash(buffer);
 	//printf("HASH NUM: %d", hashNum(HASH));
 	swap(buffer, hashNum(HASH));
 	//printf("\nSwap text: %s\n", buffer);
-	
+
 	s2h(buffer);
-	//printf("\nHex text: %s\n", buffer);	
-	
+	//printf("\nHex text: %s\n", buffer);
+
 	ccEncr(buffer, hashNum(HASH));
 	//printf("\nCCE text: %s\n", buffer);
-	
+
 	//Add Hash & Garbage
 	char sHash[16], garbage[GARSIZE];
 	itoa(HASH, sHash, 10);
 	garbageGenerator(garbage);
 	allinone(_encrypted, sHash, buffer, garbage);
-	
+
 	chooseOutput(_encrypted, "Encrypted");
-	//printf("F: %s", _encrypted);	
+	//printf("F: %s", _encrypted);
 }
 
 void decr(char buffer[], char _decrypted[]){
 	printf("\n=======Decryption=======\n");
 	memset(buffer, 0, strlen(buffer));
 	chooseInput(buffer);
-	
+
 	//Get Hash & remove garbage
 	char shash[HASHSIZE];
-	
+
 	if(!isAcceptableSize(buffer)) return;
-	
+
 	getHash(buffer, shash, HASHSIZE);
 	cleanBuffer(buffer);
-	
+
 	int HASH = atoi(shash);
-	
+
 	ccDecr(buffer, hashNum(HASH));
 	//printf("\nCCD text: %s\n", buffer);
-	
+
 	h2s(buffer);
 	//printf("\nHEX: %s", buffer);
-	
+
 	swap(buffer, hashNum(HASH));
 	//printf("\nSwap: %s", buffer);
-	
+
 	//Generate hash
 	//Validate
-	
+
 	strncpy(_decrypted, buffer, strlen(buffer));
-	
+
 	chooseOutput(_decrypted, "Decrypted");
 }
 
@@ -213,7 +222,7 @@ void ccDecr(char io[], int num){ //io -> input / output
     		}
             break;
         }
-        
+
         if(j < a){  //Gia otan einai sthn arxh tou string, na phgainei sto telos
             j += strlen(hexChars);
             io[i] = hexChars[j - a];
@@ -228,17 +237,17 @@ void ccDecr(char io[], int num){ //io -> input / output
 
 void ccEncr(char io[], int num){ //io -> input / output
 	char hexChars[] = "0123456789ABCDEF";
-	
+
 	int i, j, a;
     for (i = 0; i < strlen(io); i++){
         a = f(num, i)%16+1;
 		for (j = 0; j < strlen(io);){  //Psaxnei ton characthra sto hexChars
-            while (io[i] != hexChars[j]){        	
+            while (io[i] != hexChars[j]){
 				j++;
             }
             break;
         }
-        
+
         if(j + a >= strlen(hexChars)){  //Gia otan einai sto telos tou string, na phgainei apo thn arxh
             j -= strlen(hexChars);
             io[i] = hexChars[j + a];
@@ -256,9 +265,9 @@ void s2h(char io[]){
   	int len = strlen(io);
 	char temp[MAX];
 	strncpy(temp, io, len);
-	
+
 	memset(io, 0, strlen(io)); //Empties Array
-	
+
   	int j = 0;
 	for (int i = 0; i < len; ++i){
 		sprintf(io + j, "%02X", temp[i] & 0xff);
@@ -269,8 +278,8 @@ void s2h(char io[]){
 
 void swap (char P[], int hashN){
 	int messageL = strlen(P);
-	int repeats = messageL / hashN;	
-	
+	int repeats = messageL / hashN;
+
 	if (messageL % hashN == 0 || messageL % hashN == 1)
 	{
 		int n1 = 0;
@@ -285,7 +294,7 @@ void swap (char P[], int hashN){
 	}
 	while (counter < repeats);
     }
-	
+
 	else
 	{
 		int n1 = 0;
@@ -305,15 +314,15 @@ void swap (char P[], int hashN){
 }
 
 
-int createHash(char buffer[]){
-	return 1234;
-}
-
-
 void getTextFILE(char buffer[]){
 	char filename[MAX-MAX/2];
-	askFile(filename);
-	//printf("FILE: %s", filename);
+	
+	do{
+		askFile(filename);
+		if(access(filename, F_OK) == 0) break;
+		printf("File does not exist\n\n");
+	}
+	while(access(filename, F_OK) != 0); //checks if file exists
 	
 	getFile(filename, buffer);
 }
@@ -321,9 +330,12 @@ void getTextFILE(char buffer[]){
 
 void getTextSTRING(char buffer[]){
 	char temp[MAX];
-	memset(temp, 0, strlen(temp)); //Empty array
-	printf("Give text: ");
-	scanf("%s", temp);
-	
+	do{
+		memset(temp, 0, strlen(temp)); //Empty array
+		printf("Give text: ");
+		fgets(temp, MAX, stdin);
+	}
+	while(!checkInput(temp));
+
 	strncpy(buffer, temp, strlen(temp));
 }
