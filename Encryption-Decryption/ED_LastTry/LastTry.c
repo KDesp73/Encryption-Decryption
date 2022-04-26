@@ -94,6 +94,9 @@ void menu(char _encr[], char _decr[]){
 
 	char buffer[MAX];
 	memset(buffer, 0, strlen(buffer));
+	
+	printf("BUFFER: %s", buffer);
+	
 	switch(choice){
 		case 1:
 			encr(buffer, _encr);
@@ -186,7 +189,7 @@ void decr(char buffer[], char _decrypted[]){
 
 	//Generate hash
 	//Validate
-
+	memset(_decrypted, 0, MAX);
 	strncpy(_decrypted, buffer, strlen(buffer));
 
 	chooseOutput(_decrypted, "Decrypted");
@@ -316,14 +319,14 @@ void swap (char P[], int hashN){
 
 void getTextFILE(char buffer[]){
 	char filename[MAX-MAX/2];
-	
+
 	do{
 		askFile(filename);
 		if(access(filename, F_OK) == 0) break;
 		printf("File does not exist\n\n");
 	}
 	while(access(filename, F_OK) != 0); //checks if file exists
-	
+
 	getFile(filename, buffer);
 }
 

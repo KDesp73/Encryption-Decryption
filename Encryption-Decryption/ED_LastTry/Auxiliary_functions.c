@@ -50,7 +50,7 @@ bool checkName(char name[]){
 
 void askFile(char filename[]){
 	do{
-		printf("Give filename name: ");
+		printf("Give file name: ");
 		scanf("%s", filename);
 	}
 	while(!checkName(filename)); // && !checkName(filename)!checkTXT(filename)

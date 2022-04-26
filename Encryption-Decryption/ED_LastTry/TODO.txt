@@ -2,4 +2,6 @@ TODO:
 
 1) Hash generator
 2) Checks when needed
-3) 
+3) In getFile get only a certain amount of characters (or else it crashes if it's bigger than MAX)
+4) Empty buffer for sure;
+5) Before writing to a file check if filename already exists
