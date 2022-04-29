@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 #define MAX 1000
-#define HASHSIZE 4
+#define HASHSIZE 8
 #define GARSIZE 10
 
 #ifdef WIN32

@@ -5,11 +5,14 @@
 #include <math.h>
 #include <time.h>
 
+
 #include "Auxiliary_functions.c"
 
 #define MAX 1000
-#define HASHSIZE 4
+#define HASHSIZE 8
 #define GARSIZE 10
+
+
 
 //Encryption
 void encr();
@@ -95,8 +98,6 @@ void menu(char _encr[], char _decr[]){
 	char buffer[MAX];
 	memset(buffer, 0, strlen(buffer));
 	
-	printf("BUFFER: %s", buffer);
-	
 	switch(choice){
 		case 1:
 			encr(buffer, _encr);
@@ -132,7 +133,7 @@ int main(){
 
 
 int createHash(char buffer[]){
-	return 1234;
+	return 11111112;
 }
 
 
@@ -318,21 +319,24 @@ void swap (char P[], int hashN){
 
 
 void getTextFILE(char buffer[]){
-	char filename[MAX-MAX/2];
-
+	char filename[100];
+	
 	do{
 		askFile(filename);
-		if(access(filename, F_OK) == 0) break;
-		printf("File does not exist\n\n");
+		
+		if(access(filename, F_OK) != 0)
+			printf("File does not exist\n\n");
 	}
 	while(access(filename, F_OK) != 0); //checks if file exists
-
+	
+	
 	getFile(filename, buffer);
 }
 
 
 void getTextSTRING(char buffer[]){
 	char temp[MAX];
+	memset(temp, 0, MAX);
 	do{
 		memset(temp, 0, strlen(temp)); //Empty array
 		printf("Give text: ");
