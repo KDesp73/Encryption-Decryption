@@ -1,10 +1,13 @@
 +---------------------------------------------------+
 		       -ABOUT-
 
-   Made by: 	Giantselidis Konstantinos
-		Georgalis Thanasis
+   Made by: 	Georgalis Thanasis
+		Giantselidis Konstantinos
 		Despoinidis Konstantinos
 		Mokas Konstantinos
 
-		      @2021-22
+	    Department of Information and 
+	    Electronic Engineering | IHU 
+		      
+		     @2021-22
 +---------------------------------------------------+
