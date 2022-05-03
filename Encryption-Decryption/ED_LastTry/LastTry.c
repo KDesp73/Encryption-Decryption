@@ -201,6 +201,7 @@ void decr(char buffer[], char _decrypted[]){
 void h2s(char io[]){
 	int len = strlen(io);
   	char string[MAX];
+  	memset(string, 0, strlen(string));
   	int i=0, j=0;
 	for (j = 0; j < len-1; j += 2) {
     	int val[1];
@@ -209,13 +210,13 @@ void h2s(char io[]){
     	string[i + 1] = '\0';
     	++i;
   	}
+  	
   	strcpy(io, string);
 }
 
 
 void ccDecr(char io[], int num){ //io -> input / output
 	char hexChars[] = "0123456789ABCDEF";
-
 
 	int i, j, a;
     for (i = 0; i < strlen(io); i++){
@@ -329,7 +330,7 @@ void getTextFILE(char buffer[]){
 	}
 	while(access(filename, F_OK) != 0); //checks if file exists
 	
-	
+	memset(buffer, 0, strlen(buffer));
 	getFile(filename, buffer);
 }
 
@@ -344,5 +345,5 @@ void getTextSTRING(char buffer[]){
 	}
 	while(!checkInput(temp));
 
-	strncpy(buffer, temp, strlen(temp));
+	strcpy(buffer, temp);
 }

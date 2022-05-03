@@ -18,6 +18,7 @@
 
 
 void getFile(char file[], char buffer[]){
+	memset(buffer, 0, strlen(buffer));
 	FILE *fp;
     fp = fopen(file, "rb");
 	size_t i;
@@ -91,8 +92,7 @@ int hashNum(int hash){
 
 void swapKout (char P[], int n1, int n2, int hashN){
     char temp;
-    while (n1 < n2)
-	{
+    while (n1 < n2){
 	    temp = P[n2]; 
 	    P[n2] = P[n1];
 	    P[n1] = temp;
@@ -113,6 +113,7 @@ void allinone(char finalarray[], char hash[], char ogArray[], char garbage[]){
 }
 
 void getHash(char buffer[], char hash[], int sizeofHash){
+	memset(hash, 0, strlen(hash));
 	for(int i = 0; i < sizeofHash; i++){
 		hash[i] = buffer[i];
 	}
@@ -139,6 +140,8 @@ bool checkLetter(char letter){
 }
 
 void garbageGenerator(char garbage[]){
+	memset(garbage, 0, strlen(garbage));
+	
 	char hexChars[] = "0123456789ABCDEF";
 	char num[] = "0123456789";
 
@@ -152,6 +155,7 @@ void garbageGenerator(char garbage[]){
 
 void cleanBuffer(char buffer[]){
 	char temp[MAX];
+	memset(temp, 0, strlen(temp));
 	int i, j = 0;
 	for(i = HASHSIZE; i < strlen(buffer) - GARSIZE - 1; i++){
 		temp[j] = buffer[i];
@@ -166,6 +170,7 @@ bool isAcceptableSize(char buffer[]){
 }
 
 void writeFile(char buffer[], char filename[]){
+	memset(buffer, 0, strlen(buffer));
 	FILE *fp;
 	fp = fopen(filename, "w+");
 	fputs(buffer, fp);
