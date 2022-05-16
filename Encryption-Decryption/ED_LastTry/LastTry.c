@@ -9,7 +9,7 @@
 
 #include "Auxiliary_functions.c"
 
-#define MAX 1000
+#define MAX 100000
 #define HASHSIZE 8
 #define GARSIZE 10
 

@@ -1,9 +1,7 @@
 TODO:
 
-1) Hash generator
-2) Checks when needed
-3) In getFile get only a certain amount of characters (or else it crashes if it's bigger than MAX)
-4) Before writing to a file check if filename already exists
-5)Εχει θεμα με τα ελληνικα
+1) Checks when needed
+2) Before writing to a file check if filename already exists
+3)Εχει θεμα με τα ελληνικα
+4)Στη Hash να βγαζει μονο hex χαρακτηρες
 
-Για τεραστια αρχεια να γινεται αποσπασματικα το encryption και να μπαινουν ενα ενα τα κομματακια  σε αλλο αρχειο
