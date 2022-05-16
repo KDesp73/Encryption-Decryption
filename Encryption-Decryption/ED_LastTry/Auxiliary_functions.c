@@ -21,6 +21,19 @@
 #endif
 
 
+//COLORS
+void SetConsoleColour(WORD* Attributes, DWORD Colour){
+    CONSOLE_SCREEN_BUFFER_INFO Info;
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    GetConsoleScreenBufferInfo(hStdout, &Info);
+    *Attributes = Info.wAttributes;
+    SetConsoleTextAttribute(hStdout, Colour);
+}
+
+void ResetConsoleColour(WORD Attributes){
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Attributes);
+}
+
 void getFile(char file[], char buffer[]){
 	memset(buffer, 0, strlen(buffer));
 	FILE *fp;
@@ -219,27 +232,33 @@ void getTextFILE(char buffer[]){
 
 void getTextSTRING(char buffer[]){
 	char temp[MAX];
+	int count = 0;
 	memset(temp, 0, MAX);
-	/*
+	printf("\tGive text: ");
 	do{
 		memset(temp, 0, strlen(temp)); //Empty array
-		printf("\tGive text: ");
 		fgets(temp, MAX, stdin);
-	}*/
-	while(!checkInput(temp)){
-		memset(temp, 0, strlen(temp)); //Empty array
-		printf("\tGive text: ");
-		fgets(temp, MAX, stdin);
+		
+		if(count > 0 && !checkInput(temp)){
+			printf("\tGive text: ");
+		}
+		
+		count++;
 	}
+	while(!checkInput(temp));
+	
 
 	strcpy(buffer, temp);
 }
 
 void chooseInput(char buffer[]){
 	int choice;
+	WORD Attributes = 0;
 	printf("\n\tSelect Input Method: [1]File [2]Text\n");
 	do{
+		SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
 		printf("\t> ");
+		ResetConsoleColour(Attributes);
 		scanf("%d", &choice);
 	}
 	while(choice < 1 || choice > 2);
@@ -258,9 +277,12 @@ void chooseInput(char buffer[]){
 }
 void chooseOutput(char out[], char msg[]){
 	int choice;
+	WORD Attributes = 0;
 	printf("\tSelect Output Method: [1]Create File [2]Print text [3]Both\n");
 	do{
+		SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
 		printf("\t> ");
+		ResetConsoleColour(Attributes);
 		scanf("%d", &choice);
 	}
 	while(choice < 1 || choice > 3);
@@ -303,18 +325,7 @@ int main(){
 }
 */
 
-//COLORS
-void SetConsoleColour(WORD* Attributes, DWORD Colour){
-    CONSOLE_SCREEN_BUFFER_INFO Info;
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-    GetConsoleScreenBufferInfo(hStdout, &Info);
-    *Attributes = Info.wAttributes;
-    SetConsoleTextAttribute(hStdout, Colour);
-}
 
-void ResetConsoleColour(WORD Attributes){
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Attributes);
-}
 
 void caps(char hash[]){
 	 for(int i= 0; i < strlen(hash); i++){

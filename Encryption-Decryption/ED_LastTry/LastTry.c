@@ -43,7 +43,9 @@ void menu(char _encr[], char _decr[]){
 	printf("\tSelect [1]Encryption [2]Decryption\n\t       [3]About [4]Exit\n");
 	int choice;
 	do{
+		SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
 		printf("\t> ");
+		ResetConsoleColour(Attributes);
 		scanf("%d", &choice);
 	}
 	while(choice < 1 || choice > 4);
@@ -189,13 +191,25 @@ void decr(char buffer[], char _decrypted[]){
 
 	swap(buffer, hashNum(HASH)); //===========================> na allaksei to hashNum
 	//printf("\nSwap: %s", buffer);
-
-	//Generate hash
-	//Validate
+	
 	memset(_decrypted, 0, MAX);
 	strncpy(_decrypted, buffer, strlen(buffer));
-
 	chooseOutput(_decrypted, "Decrypted");
+	
+	/*//Generate hash
+	char NHASH[HASHSIZE];
+	//memset(NHASH, 0, HASHSIZE);
+	createHash(_decrypted, NHASH);
+	printf("Nhash: %s", NHASH);
+	//Validate
+	if(strcmp(NHASH, HASH) == 0){
+		chooseOutput(_decrypted, "Decrypted");
+	}
+	else{
+		printf("\tERROR MESSAGE: Invalid hash");
+	}*/
+	
+	
 }
 
 
