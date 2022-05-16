@@ -17,7 +17,7 @@
 
 //Encryption
 void encr();
-int createHash();
+void createHash();
 void swap();
 void s2h();
 void ccEncr();
@@ -36,7 +36,10 @@ int decrInputErrors();
 
 
 void menu(char _encr[], char _decr[]){
+	WORD Attributes = 0;
+	SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
 	printf("\n\n\t\t::::Menu::::\n");
+	ResetConsoleColour(Attributes);
 	printf("\tSelect [1]Encryption [2]Decryption\n\t       [3]About [4]Exit\n");
 	int choice;
 	do{
@@ -85,8 +88,8 @@ int main(){
 //========END OF MAIN========
 
 
-int createHash(char buffer[]){
-	return 11572979;
+void createHash(char buffer[], char hash[]){
+	strncpy(hash, "1A2BCD65", 8);
 }
 
 
@@ -101,22 +104,23 @@ void encr(char buffer[], char _encrypted[]){
 	chooseInput(buffer);
 	//printf("\nInitial text:\n%s\n", buffer);
 
-	int HASH = createHash(buffer);
+	char HASH[8];
+	createHash(buffer, HASH);
 	//printf("HASH NUM: %d", hashNum(HASH));
-	swap(buffer, hashNum(HASH));
+	swap(buffer, hashNum(HASH)); //===========================> na allaksei to hashNum
 	//printf("\nSwap text: %s\n", buffer);
 
 	s2h(buffer);
 	//printf("\nHex text: %s\n", buffer);
 
-	ccEncr(buffer, hashNum(HASH));
+	ccEncr(buffer, hashNum(HASH)); //===========================> na allaksei to hashNum
 	//printf("\nCCE text: %s\n", buffer);
 
 	//Add Hash & Garbage
 	char sHash[16], garbage[GARSIZE];
-	itoa(HASH, sHash, 10);
+	//itoa(HASH, sHash, 10);
 	garbageGenerator(garbage);
-	allinone(_encrypted, sHash, buffer, garbage);
+	allinone(_encrypted, HASH, buffer, garbage);
 
 	chooseOutput(_encrypted, "Encrypted");
 	//printf("F: %s", _encrypted);
@@ -133,26 +137,27 @@ void decr(char buffer[], char _decrypted[]){
 	chooseInput(buffer);
 	
 	//Get Hash & remove garbage
-	char shash[HASHSIZE];
+	//char shash[HASHSIZE];
+	char HASH[HASHSIZE];
 
 	switch(decrInputErrors(buffer)){
 		case 0: break;
 		case -1: return;
 	}
 
-	getHash(buffer, shash, HASHSIZE);
+	getHash(buffer, HASH, HASHSIZE);
 
 	cleanBuffer(buffer);
 
-	int HASH = atoi(shash);
+	//int HASH = atoi(shash);
 
-	ccDecr(buffer, hashNum(HASH));
+	ccDecr(buffer, hashNum(HASH)); //===========================> na allaksei to hashNum
 	//printf("\nCCD text: %s\n", buffer);
 
 	h2s(buffer);
 	//printf("\nHEX: %s", buffer);
 
-	swap(buffer, hashNum(HASH));
+	swap(buffer, hashNum(HASH)); //===========================> na allaksei to hashNum
 	//printf("\nSwap: %s", buffer);
 
 	//Generate hash
@@ -248,7 +253,7 @@ void s2h(char io[]){
 }
 
 
-void swap (char P[], int hashN){
+void swap(char P[], int hashN){
 	int messageL = strlen(P);
 	int repeats = messageL / hashN;
 
@@ -259,7 +264,7 @@ void swap (char P[], int hashN){
 	    int counter = 0;
 	do
 	{
-		swapKout(P, n1, n2, hashN);
+		swapKout(P, n1, n2);
 		n1 = n1 + hashN;
 		n2 = n2 + hashN;
 		counter++;
@@ -272,16 +277,16 @@ void swap (char P[], int hashN){
 		int n1 = 0;
 	    int n2 = hashN - 1;
 	    int counter = 0;
-	do
-	{
-		swapKout(P, n1, n2, hashN);
-		n1 = n1 + hashN;
-		n2 = n2 + hashN;
-		counter++;
-	}
-	while (counter < repeats);
-	n2 = messageL - 1;
-	swapKout (P, n1, n2, messageL % hashN);
+		do
+		{
+			swapKout(P, n1, n2);
+			n1 = n1 + hashN;
+			n2 = n2 + hashN;
+			counter++;
+		}
+		while (counter < repeats);
+		n2 = messageL - 1;
+		swapKout (P, n1, n2);
 	}
 }
 
