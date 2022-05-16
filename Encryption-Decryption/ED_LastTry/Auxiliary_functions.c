@@ -5,8 +5,12 @@
 #include <math.h>
 #include <time.h>
 #include <unistd.h>
+#include <windows.h>
+#include <ctype.h>
+
 
 #define MAX 1000
+
 #define HASHSIZE 8
 #define GARSIZE 10
 
@@ -51,7 +55,7 @@ bool checkName(char name[]){
 
 void askFile(char filename[]){
 	do{
-		printf("Give file name: ");
+		printf("\tGive file name: ");
 		scanf("%s", filename);
 	}
 	while(!checkName(filename)); // && !checkName(filename)!checkTXT(filename)
@@ -79,7 +83,7 @@ void digits(int num, int digits[]){
 		i--;
 	}
 }
-
+/*
 int hashNum(int hash){
 	int digitsArr[MAX];
 	digits(hash, digitsArr);
@@ -88,9 +92,24 @@ int hashNum(int hash){
 		if(digitsArr[i] <= 1) continue;
 		return digitsArr[i];
 	}
+}*/
+
+int hashNum(char hash[]){
+	char nums[] = "23456789";
+	char *str = malloc(2);
+	str[1] = '\0';
+	for(int i = 0 ; strlen(hash); i++){
+		for(int j = 0; strlen(nums); j++){
+			if(hash[i] != nums[j]) break;
+			str[0] = hash[i];
+			//strnum+1 = '\0';
+			return atoi(str);
+		}
+	}
+	return -1;
 }
 
-void swapKout (char P[], int n1, int n2, int hashN){
+void swapKout (char P[], int n1, int n2){
     char temp;
     while (n1 < n2){
 	    temp = P[n2]; 
@@ -164,9 +183,11 @@ void cleanBuffer(char buffer[]){
 	strcpy(buffer, temp);
 }
 
-bool isAcceptableSize(char buffer[]){
-	if(strlen(buffer) < HASHSIZE + GARSIZE) return false;
-	return true;
+int isAcceptable(char buffer[]){
+	if(strlen(buffer) == 0) return 1; //Empty file
+	else if(strlen(buffer) < HASHSIZE + GARSIZE) return 2; //Make it do the decryption without removing garbage
+	//else if(/*Not acceptable characters*/) return 3;
+	else return 0; //OK
 }
 
 void writeFile(char buffer[], char filename[]){
@@ -179,6 +200,92 @@ void writeFile(char buffer[], char filename[]){
 bool checkInput(char buffer[]){
 	return strlen(buffer) > 2; //it's... stable
 }
+
+void getTextFILE(char buffer[]){
+	char filename[100];
+	
+	do{
+		askFile(filename);
+		
+		if(access(filename, F_OK) != 0)
+			printf("\t\tERROR MESSAGE: File does not exist\n\n");
+	}
+	while(access(filename, F_OK) != 0); //checks if file exists
+	
+	memset(buffer, 0, strlen(buffer));
+	getFile(filename, buffer);
+}
+
+
+void getTextSTRING(char buffer[]){
+	char temp[MAX];
+	memset(temp, 0, MAX);
+	/*
+	do{
+		memset(temp, 0, strlen(temp)); //Empty array
+		printf("\tGive text: ");
+		fgets(temp, MAX, stdin);
+	}*/
+	while(!checkInput(temp)){
+		memset(temp, 0, strlen(temp)); //Empty array
+		printf("\tGive text: ");
+		fgets(temp, MAX, stdin);
+	}
+
+	strcpy(buffer, temp);
+}
+
+void chooseInput(char buffer[]){
+	int choice;
+	printf("\n\tSelect Input Method: [1]File [2]Text\n");
+	do{
+		printf("\t> ");
+		scanf("%d", &choice);
+	}
+	while(choice < 1 || choice > 2);
+
+	switch(choice){
+		case 1:
+			getTextFILE(buffer);
+			break;
+		case 2:
+			getTextSTRING(buffer);
+			break;
+		default:
+			printf("\t\tERROR MESSAGE: chooseInput -> DO-WHILE -> CHOICE");
+			exit(1);
+	}
+}
+void chooseOutput(char out[], char msg[]){
+	int choice;
+	printf("\tSelect Output Method: [1]Create File [2]Print text [3]Both\n");
+	do{
+		printf("\t> ");
+		scanf("%d", &choice);
+	}
+	while(choice < 1 || choice > 3);
+
+	char filename[50];
+	switch(choice){
+		case 1:
+			askFile(filename);
+			writeFile(out, filename);
+			break;
+		case 2:
+			printf("\t%s Text:\n\t%s", msg, out);
+			break;
+		case 3:
+			printf("\t%s Text:\n\t%s\n", msg, out);
+			askFile(filename);
+			writeFile(out, filename);
+			break;
+		default:
+			printf("\t\tERROR MESSAGE: OUTPUT -> DO-WHILE -> CHOICE");
+			exit(1);
+	}
+	memset(filename, 0, strlen(filename));
+}
+
 /*
 int main(){
 	char buffer[MAX];
@@ -195,3 +302,24 @@ int main(){
 	return 0;
 }
 */
+
+//COLORS
+void SetConsoleColour(WORD* Attributes, DWORD Colour){
+    CONSOLE_SCREEN_BUFFER_INFO Info;
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    GetConsoleScreenBufferInfo(hStdout, &Info);
+    *Attributes = Info.wAttributes;
+    SetConsoleTextAttribute(hStdout, Colour);
+}
+
+void ResetConsoleColour(WORD Attributes){
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), Attributes);
+}
+
+void caps(char hash[]){
+	 for(int i= 0; i < strlen(hash); i++){
+	 	hash[i] = toupper(hash[i]);
+	 }
+}
+
+

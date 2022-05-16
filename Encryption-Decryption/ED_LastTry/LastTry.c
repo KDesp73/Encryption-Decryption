@@ -88,8 +88,38 @@ int main(){
 //========END OF MAIN========
 
 
-void createHash(char buffer[], char hash[]){
-	strncpy(hash, "1A2BCD65", 8);
+void createHash(char buffer[], char chash[]){
+	//strncpy(hash, "1A2BCD65", 8);
+	
+	int max_now = 0;
+	int now = 0;
+	char strings[10][MAX/10];
+	int hs[MAX/10];
+	char string[10];
+	int i;
+	int x = MAX/16;
+	char iot[20];
+	char temp_string[MAX] = "";
+	char hs2[MAX/10];
+	
+	for(i=0;i<=MAX;i+=10){
+		int h = buffer[i] + buffer[i+1] + buffer[i+2] + buffer[i+3] + buffer[i+4] + buffer[i+5] + buffer[i+6] + buffer[i+7] + buffer[i+8] + buffer[i+9];
+		hs[now] = h>>13-i;
+		hs2[now] = h^hs[now];
+		now++;
+		max_now++;	
+	}
+	
+	
+	for(i=0;i<=max_now;i++){
+		if(hs2[i]<0) hs2[i]=fabs(hs2[i]);
+		itoa(hs2[i],iot,16);
+		strcat(temp_string,iot);
+	}
+	
+	
+	strncpy(chash,temp_string, 8);
+	caps(chash);
 }
 
 
