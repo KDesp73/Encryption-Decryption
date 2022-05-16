@@ -139,13 +139,13 @@ void encr(char buffer[], char _encrypted[]){
 	char HASH[8];
 	createHash(buffer, HASH);
 	//printf("HASH NUM: %d", hashNum(HASH));
-	swap(buffer, hashNum(HASH)); //===========================> na allaksei to hashNum
+	swap(buffer, hashNum(HASH)); 
 	//printf("\nSwap text: %s\n", buffer);
 
 	s2h(buffer);
 	//printf("\nHex text: %s\n", buffer);
 
-	ccEncr(buffer, hashNum(HASH)); //===========================> na allaksei to hashNum
+	ccEncr(buffer, hashNum(HASH)); 
 	//printf("\nCCE text: %s\n", buffer);
 
 	//Add Hash & Garbage
@@ -183,13 +183,13 @@ void decr(char buffer[], char _decrypted[]){
 
 	//int HASH = atoi(shash);
 
-	ccDecr(buffer, hashNum(HASH)); //===========================> na allaksei to hashNum
+	ccDecr(buffer, hashNum(HASH));
 	//printf("\nCCD text: %s\n", buffer);
 
 	h2s(buffer);
 	//printf("\nHEX: %s", buffer);
 
-	swap(buffer, hashNum(HASH)); //===========================> na allaksei to hashNum
+	swap(buffer, hashNum(HASH));
 	//printf("\nSwap: %s", buffer);
 	
 	memset(_decrypted, 0, MAX);

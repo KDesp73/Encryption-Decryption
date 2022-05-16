@@ -278,7 +278,7 @@ void chooseInput(char buffer[]){
 void chooseOutput(char out[], char msg[]){
 	int choice;
 	WORD Attributes = 0;
-	printf("\tSelect Output Method: [1]Create File [2]Print text [3]Both\n");
+	printf("\n\tSelect Output Method: [1]Create File [2]Print text [3]Both\n");
 	do{
 		SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
 		printf("\t> ");
@@ -294,10 +294,10 @@ void chooseOutput(char out[], char msg[]){
 			writeFile(out, filename);
 			break;
 		case 2:
-			printf("\t%s Text:\n\t%s", msg, out);
+			printf("\n\t%s Text:\n\t%s", msg, out);
 			break;
 		case 3:
-			printf("\t%s Text:\n\t%s\n", msg, out);
+			printf("\n\t%s Text:\n\t%s\n", msg, out);
 			askFile(filename);
 			writeFile(out, filename);
 			break;
