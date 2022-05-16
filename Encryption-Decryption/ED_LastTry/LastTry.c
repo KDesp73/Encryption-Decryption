@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <time.h>
+#include <windows.h>
 
 
 #include "Auxiliary_functions.c"
@@ -30,60 +31,9 @@ void ccDecr();
 void h2s();
 //swap again
 
-//Auxiliary functions
-void getTextFILE();
-void getTextSTRING();
 
-void chooseInput(char buffer[]){
-	int choice;
-	printf("\nSelect Input Method: [1]File [2]Text\n");
-	do{
-		printf("> ");
-		scanf("%d", &choice);
-	}
-	while(choice < 1 || choice > 2);
+int decrInputErrors();
 
-	switch(choice){
-		case 1:
-			getTextFILE(buffer);
-			break;
-		case 2:
-			getTextSTRING(buffer);
-			break;
-		default:
-			printf("chooseInput -> DO-WHILE -> CHOICE");
-			exit(1);
-	}
-}
-void chooseOutput(char out[], char msg[]){
-	int choice;
-	printf("Select Output Method: [1]Create File [2]Print text [3]Both\n");
-	do{
-		printf("> ");
-		scanf("%d", &choice);
-	}
-	while(choice < 1 || choice > 3);
-
-	char filename[50];
-	switch(choice){
-		case 1:
-			askFile(filename);
-			writeFile(out, filename);
-			break;
-		case 2:
-			printf("%s Text:\n%s", msg, out);
-			break;
-		case 3:
-			printf("%s Text:\n%s\n", msg, out);
-			askFile(filename);
-			writeFile(out, filename);
-			break;
-		default:
-			printf("OUTPUT -> DO-WHILE -> CHOICE");
-			exit(1);
-	}
-	memset(filename, 0, strlen(filename));
-}
 
 void menu(char _encr[], char _decr[]){
 	printf("\n\n\t\t::::Menu::::\n");
@@ -112,17 +62,20 @@ void menu(char _encr[], char _decr[]){
 		case 4:
 			exit(0);
 		default:
-			printf("WTF");
+			printf("\tWTF");
 	}
 }
 
 //========MAIN========
 int main(){
+	ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
+
 	srand(time(NULL));
+	
 	char _encr[MAX];
 	char _decr[MAX];
 
-	printf("=============ENCRYPTION-DECRYPTION=============\n\n");
+	printf("\t=============ENCRYPTION-DECRYPTION=============\n\n");
 	menu(_encr, _decr);
 
 
@@ -133,12 +86,17 @@ int main(){
 
 
 int createHash(char buffer[]){
-	return 11111119;
+	return 11572979;
 }
 
 
 void encr(char buffer[], char _encrypted[]){
-	printf("\n=======Encryption=======\n");
+	WORD Attributes = 0;
+	SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
+	printf("\n\t=======Encryption=======\n");
+	ResetConsoleColour(Attributes);
+	
+	
 	memset(buffer, 0, strlen(buffer));
 	chooseInput(buffer);
 	//printf("\nInitial text:\n%s\n", buffer);
@@ -165,16 +123,21 @@ void encr(char buffer[], char _encrypted[]){
 }
 
 void decr(char buffer[], char _decrypted[]){
-	printf("\n=======Decryption=======\n");
+	WORD Attributes = 0;
+	SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
+	printf("\n\t=======Decryption=======\n");
+	ResetConsoleColour(Attributes);
+	
+	
 	memset(buffer, 0, strlen(buffer));
 	chooseInput(buffer);
 	
 	//Get Hash & remove garbage
 	char shash[HASHSIZE];
 
-	if(!isAcceptableSize(buffer)){
-		printf("\nERROR MESSAGE: Empty File\n");
-		return;	
+	switch(decrInputErrors(buffer)){
+		case 0: break;
+		case -1: return;
 	}
 
 	getHash(buffer, shash, HASHSIZE);
@@ -322,32 +285,37 @@ void swap (char P[], int hashN){
 	}
 }
 
+void dummyDecr(char buffer[], char _decrypted[]){
+	ccDecr(buffer, 2);
+	//printf("\nCCD text: %s\n", buffer);
 
-void getTextFILE(char buffer[]){
-	char filename[100];
-	
-	do{
-		askFile(filename);
-		
-		if(access(filename, F_OK) != 0)
-			printf("File does not exist\n\n");
-	}
-	while(access(filename, F_OK) != 0); //checks if file exists
-	
-	memset(buffer, 0, strlen(buffer));
-	getFile(filename, buffer);
+	h2s(buffer);
+	//printf("\nHEX: %s", buffer);
+
+	swap(buffer, 2);
+	//printf("\nSwap: %s", buffer);
+
+	//Generate hash
+	//Validate
+	memset(_decrypted, 0, MAX);
+	strncpy(_decrypted, buffer, strlen(buffer));
+
+	chooseOutput(_decrypted, "Decrypted");
 }
 
-
-void getTextSTRING(char buffer[]){
+int decrInputErrors(char buffer[]){
 	char temp[MAX];
-	memset(temp, 0, MAX);
-	do{
-		memset(temp, 0, strlen(temp)); //Empty array
-		printf("Give text: ");
-		fgets(temp, MAX, stdin);
+	switch(isAcceptable(buffer)){
+		case 0:
+			return 0;
+			break;
+		case 1:
+			printf("\tERROR MESSAGE: Empty File\n");
+			return -1;
+			break;
+		case 2:
+			dummyDecr(buffer, temp);
+			return -1;
+			break;			
 	}
-	while(!checkInput(temp));
-
-	strcpy(buffer, temp);
 }
