@@ -170,7 +170,6 @@ bool isAcceptableSize(char buffer[]){
 }
 
 void writeFile(char buffer[], char filename[]){
-	memset(buffer, 0, strlen(buffer));
 	FILE *fp;
 	fp = fopen(filename, "w+");
 	fputs(buffer, fp);

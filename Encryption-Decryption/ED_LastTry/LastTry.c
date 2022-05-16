@@ -133,7 +133,7 @@ int main(){
 
 
 int createHash(char buffer[]){
-	return 11111112;
+	return 11111119;
 }
 
 
@@ -168,13 +168,17 @@ void decr(char buffer[], char _decrypted[]){
 	printf("\n=======Decryption=======\n");
 	memset(buffer, 0, strlen(buffer));
 	chooseInput(buffer);
-
+	
 	//Get Hash & remove garbage
 	char shash[HASHSIZE];
 
-	if(!isAcceptableSize(buffer)) return;
+	if(!isAcceptableSize(buffer)){
+		printf("\nERROR MESSAGE: Empty File\n");
+		return;	
+	}
 
 	getHash(buffer, shash, HASHSIZE);
+
 	cleanBuffer(buffer);
 
 	int HASH = atoi(shash);
