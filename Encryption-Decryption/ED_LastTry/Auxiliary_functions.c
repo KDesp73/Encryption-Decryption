@@ -21,6 +21,15 @@
 #endif
 
 
+bool checkInt(char input[]){
+	int i;
+	for(i = 0; i < strlen(input); i++){
+        if(isdigit(input[i])==0)
+            return false;
+    }
+    return true;
+}
+
 //COLORS
 void SetConsoleColour(WORD* Attributes, DWORD Colour){
     CONSOLE_SCREEN_BUFFER_INFO Info;
@@ -96,7 +105,7 @@ void digits(int num, int digits[]){
 		i--;
 	}
 }
-/*
+/*For int hash
 int hashNum(int hash){
 	int digitsArr[MAX];
 	digits(hash, digitsArr);
@@ -252,18 +261,26 @@ void getTextSTRING(char buffer[]){
 }
 
 void chooseInput(char buffer[]){
+	char input[1];
 	int choice;
+	
 	WORD Attributes = 0;
-	printf("\n\tSelect Input Method: [1]File [2]Text\n");
-	do{
-		SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
-		printf("\t> ");
-		ResetConsoleColour(Attributes);
-		scanf("%d", &choice);
+	printf("\n\tSelect Input Method: [0]Return [1]File [2]Text\n");
+	do{	
+		do{
+			SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
+			printf("\t> ");
+			ResetConsoleColour(Attributes);
+			scanf("%s", input);
+		}
+		while (!checkInt(input));
+		choice = atoi(input);
 	}
-	while(choice < 1 || choice > 2);
+	while(choice < 0 || choice > 2);
 
 	switch(choice){
+		case 0:
+			return;
 		case 1:
 			getTextFILE(buffer);
 			break;
@@ -308,29 +325,26 @@ void chooseOutput(char out[], char msg[]){
 	memset(filename, 0, strlen(filename));
 }
 
-/*
-int main(){
-	char buffer[MAX];
-	for(int i = 0; i < 10; i++){
-		printf("\nText: ");
-		scanf("%s", buffer);
-		
-		if(strlen(buffer) > 1) printf("TRUE\n");
-		else printf("\nFALSE\n");
-	}
-	
-	
-	system("pause");
-	return 0;
-}
-*/
-
-
-
 void caps(char hash[]){
 	 for(int i= 0; i < strlen(hash); i++){
 	 	hash[i] = toupper(hash[i]);
 	 }
 }
 
+void about(){
+	printf("+---------------------------------------------------+\n");
+	printf("		       -ABOUT-\n");
+	printf("\n");
+	printf("   Made by: 	Georgalis Thanasis\n");
+	printf("		Giantselidis Konstantinos\n");
+	printf("		Despoinidis Konstantinos\n");
+	printf("		Mokas Konstantinos\n");
+	printf("\n");
+	printf("	    Department of Information and \n");
+	printf("	     Electronic Engineering | IHU \n");
+	printf("\n");
+	printf("		     @2021-22\n");
+	printf("\n");
+	printf("+---------------------------------------------------+\n");
+}
 

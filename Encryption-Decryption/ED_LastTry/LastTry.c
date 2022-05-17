@@ -42,11 +42,16 @@ void menu(char _encr[], char _decr[]){
 	ResetConsoleColour(Attributes);
 	printf("\tSelect [1]Encryption [2]Decryption\n\t       [3]About [4]Exit\n");
 	int choice;
+	char input[1];
 	do{
-		SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
-		printf("\t> ");
-		ResetConsoleColour(Attributes);
-		scanf("%d", &choice);
+		do{
+			SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
+			printf("\t> ");
+			ResetConsoleColour(Attributes);
+			scanf("%s", input);
+		}
+		while (!checkInt(input));
+		choice = atoi(input);
 	}
 	while(choice < 1 || choice > 4);
 
@@ -61,8 +66,7 @@ void menu(char _encr[], char _decr[]){
 			decr(buffer, _decr);
 			menu(_encr, _decr);
 		case 3:
-			getFile("about.txt", buffer);
-			printf("\n%s\n", buffer);
+			about();
 			menu(_encr, _decr);
 		case 4:
 			exit(0);
@@ -91,8 +95,8 @@ int main(){
 
 
 void createHash(char buffer[], char chash[]){
-	//strncpy(hash, "1A2BCD65", 8);
-	
+	strncpy(chash, "1A2BCD65", 8);
+	/*
 	int max_now = 0;
 	int now = 0;
 	char strings[10][MAX/10];
@@ -119,9 +123,9 @@ void createHash(char buffer[], char chash[]){
 		strcat(temp_string,iot);
 	}
 	
-	
+	memset(chash, 0, strlen(chash));
 	strncpy(chash,temp_string, 8);
-	caps(chash);
+	caps(chash);*/
 }
 
 
@@ -135,7 +139,9 @@ void encr(char buffer[], char _encrypted[]){
 	memset(buffer, 0, strlen(buffer));
 	chooseInput(buffer);
 	//printf("\nInitial text:\n%s\n", buffer);
-
+	
+	if(strlen(buffer) == 0) return;
+	
 	char HASH[8];
 	createHash(buffer, HASH);
 	//printf("HASH NUM: %d", hashNum(HASH));
@@ -167,7 +173,7 @@ void decr(char buffer[], char _decrypted[]){
 	
 	memset(buffer, 0, strlen(buffer));
 	chooseInput(buffer);
-	
+	if(strlen(buffer) == 0) return;
 	//Get Hash & remove garbage
 	//char shash[HASHSIZE];
 	char HASH[HASHSIZE];
@@ -196,9 +202,9 @@ void decr(char buffer[], char _decrypted[]){
 	strncpy(_decrypted, buffer, strlen(buffer));
 	chooseOutput(_decrypted, "Decrypted");
 	
-	/*//Generate hash
-	char NHASH[HASHSIZE];
-	//memset(NHASH, 0, HASHSIZE);
+	//Generate hash
+	/*char NHASH[HASHSIZE];
+	memset(NHASH, 0, HASHSIZE);
 	createHash(_decrypted, NHASH);
 	printf("Nhash: %s", NHASH);
 	//Validate
