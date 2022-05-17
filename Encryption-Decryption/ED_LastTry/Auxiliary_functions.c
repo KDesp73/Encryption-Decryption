@@ -332,8 +332,11 @@ void caps(char hash[]){
 }
 
 void about(){
+	WORD Attributes = 0;
 	printf("+---------------------------------------------------+\n");
-	printf("		       -ABOUT-\n");
+	SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
+	printf("		      -ABOUT-\n");
+	ResetConsoleColour(Attributes);
 	printf("\n");
 	printf("   Made by: 	Georgalis Thanasis\n");
 	printf("		Giantselidis Konstantinos\n");
@@ -348,3 +351,11 @@ void about(){
 	printf("+---------------------------------------------------+\n");
 }
 
+
+void logo(){
+	printf("\t     ______  _____    \n");
+	printf("\t    /\\  ___\\/\\  __-.  \n");
+	printf("\t    \\ \\  __\\\\ \\ \\/\\ \\ \n");
+	printf("\t     \\ \\_____\\ \\____- \n");
+	printf("\t      \\/_____/\\/____/ \n");
+}

@@ -84,7 +84,10 @@ int main(){
 	char _encr[MAX];
 	char _decr[MAX];
 
-	printf("\t=============ENCRYPTION-DECRYPTION=============\n\n");
+	//printf("\t=============ENCRYPTION-DECRYPTION=============\n\n");
+	
+	logo();
+	
 	menu(_encr, _decr);
 
 
