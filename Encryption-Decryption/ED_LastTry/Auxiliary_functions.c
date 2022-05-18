@@ -9,7 +9,7 @@
 #include <ctype.h>
 
 
-#define MAX 100000
+#define MAX 200000
 
 #define HASHSIZE 8
 #define GARSIZE 10
@@ -311,12 +311,24 @@ void chooseOutput(char out[], char msg[]){
 			writeFile(out, filename);
 			break;
 		case 2:
-			printf("\n\t%s Text:\n\t%s", msg, out);
+			if(strlen(out) > 50){
+				printf("\n\t%s Text:\n%s\n", msg, out);
+			}
+			else{
+				printf("\n\t%s Text:\n\t%s\n", msg, out);
+			}
 			break;
 		case 3:
-			printf("\n\t%s Text:\n\t%s\n", msg, out);
-			askFile(filename);
-			writeFile(out, filename);
+			if(strlen(out) > 50){
+				printf("\n\t%s Text:\n%s\n", msg, out);
+				askFile(filename);
+				writeFile(out, filename);
+			}
+			else{
+				printf("\n\t%s Text:\n\t%s\n", msg, out);
+				askFile(filename);
+				writeFile(out, filename);
+			}
 			break;
 		default:
 			printf("\t\tERROR MESSAGE: OUTPUT -> DO-WHILE -> CHOICE");
@@ -353,9 +365,11 @@ void about(){
 
 
 void logo(){
-	printf("\t     ______  _____    \n");
-	printf("\t    /\\  ___\\/\\  __-.  \n");
-	printf("\t    \\ \\  __\\\\ \\ \\/\\ \\ \n");
-	printf("\t     \\ \\_____\\ \\____- \n");
-	printf("\t      \\/_____/\\/____/ \n");
+	printf("\t      ______  _____    \n");
+	printf("\t     /\\  ___\\/\\  __-.  \n");
+	printf("\t     \\ \\  __\\\\ \\ \\/\\ \\ \n");
+	printf("\t      \\ \\_____\\ \\____- \n");
+	printf("\t       \\/_____/\\/____/ \n");
+	printf("\n");
+	printf("\t   =ENCRYPTION-DECRYPTION=\n");
 }
