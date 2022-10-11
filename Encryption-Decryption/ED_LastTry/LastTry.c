@@ -5,6 +5,7 @@
 #include <math.h>
 #include <time.h>
 #include <windows.h>
+#include <unistd.h>
 
 
 #include "Auxiliary_functions.c"
@@ -98,8 +99,8 @@ int main(){
 
 
 void createHash(char buffer[], char chash[]){
-	strncpy(chash, "1A2BCD65", 8);
-	/*
+	//strncpy(chash, "1A2BCD65", 8);
+
 	int max_now = 0;
 	int now = 0;
 	char strings[10][MAX/10];
@@ -127,8 +128,14 @@ void createHash(char buffer[], char chash[]){
 	}
 	
 	memset(chash, 0, strlen(chash));
-	strncpy(chash,temp_string, 8);
-	caps(chash);*/
+	
+	int k=0;
+	char strr[20];
+	for (i=1;i<=9;i++){
+		chash[k++]=temp_string[i];
+	}
+	
+	caps(chash);
 }
 
 
@@ -180,6 +187,7 @@ void decr(char buffer[], char _decrypted[]){
 	//Get Hash & remove garbage
 	//char shash[HASHSIZE];
 	char HASH[HASHSIZE];
+	char createdHash[HASHSIZE];
 
 	switch(decrInputErrors(buffer)){
 		case 0: break;
@@ -187,9 +195,15 @@ void decr(char buffer[], char _decrypted[]){
 	}
 
 	getHash(buffer, HASH, HASHSIZE);
+	createHash(buffer, createdHash);
+	
+	if(!verify(HASH, createdHash)){
+		printf("Something went wrong");
+		return;
+	}
 
 	cleanBuffer(buffer);
-
+	
 	//int HASH = atoi(shash);
 
 	ccDecr(buffer, hashNum(HASH));

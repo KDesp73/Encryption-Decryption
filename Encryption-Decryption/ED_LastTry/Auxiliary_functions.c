@@ -75,6 +75,25 @@ bool checkName(char name[]){
 	return count == strlen(name);
 }
 
+void addEnding(char filename[]){
+	printf("\tType of file: [1].txt [2].jpg [3].png [4].pdf\n");
+	printf("\t> ");
+	char in[1];
+	int inInt;
+	do{
+		scanf("%s", in);
+		inInt = atoi(in);
+	}
+	while(checkInt(in) && (inInt < 1 || inInt > 4));
+	
+	switch(inInt){
+		case 1: strcat(filename, ".txt");break;
+		case 2: strcat(filename, ".jpg");break;
+		case 3: strcat(filename, ".png");break;
+		case 4: strcat(filename, ".pdf");break;					
+	}
+}
+
 void askFile(char filename[]){
 	do{
 		printf("\tGive file name: ");
@@ -82,8 +101,12 @@ void askFile(char filename[]){
 	}
 	while(!checkName(filename)); // && !checkName(filename)!checkTXT(filename)
 	
-	strcat(filename, ".txt");
+	//strcat(filename, ".txt");
+	addEnding(filename);
+	printf("\n\tFile name: %s\n", filename);
 }
+
+
 
 void digits(int num, int digits[]){
 	int temp, numlength;
@@ -256,7 +279,6 @@ void getTextSTRING(char buffer[]){
 	}
 	while(!checkInput(temp));
 	
-
 	strcpy(buffer, temp);
 }
 
@@ -345,7 +367,7 @@ void caps(char hash[]){
 
 void about(){
 	WORD Attributes = 0;
-	printf("+---------------------------------------------------+\n");
+	printf("\n\n+---------------------------------------------------+\n");
 	SetConsoleColour(&Attributes, FOREGROUND_INTENSITY | FOREGROUND_RED);
 	printf("		      -ABOUT-\n");
 	ResetConsoleColour(Attributes);
@@ -372,4 +394,8 @@ void logo(){
 	printf("\t       \\/_____/\\/____/ \n");
 	printf("\n");
 	printf("\t   =ENCRYPTION-DECRYPTION=\n");
+}
+
+bool verify(char a[], char b[]){
+	return strcmp(a, b);
 }
