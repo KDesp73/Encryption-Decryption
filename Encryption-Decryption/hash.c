@@ -60,7 +60,7 @@ void hash(char array[], char chash[]){
 	
 	int k=0;
 	char strr[20];
-	for (i=strlen(temp_string);i>=strlen(temp_string)-8;i--){
+	for (i=strlen(temp_string)-1;i>=strlen(temp_string)-8;i--){
 		chash[k++]=temp_string[i];
 	}
 	//printf("\n\n%s\n\n",chash);
