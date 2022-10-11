@@ -58,8 +58,12 @@ void hash(char array[], char chash[]){
 		strcat(temp_string,iot);
 	}
 	
-	//printf("\n\n%s\n\n",temp_string);
-	strcpy(chash,temp_string);
+	int k=0;
+	char strr[20];
+	for (i=strlen(temp_string);i>=strlen(temp_string)-8;i--){
+		chash[k++]=temp_string[i];
+	}
+	//printf("\n\n%s\n\n",chash);
 	
 }
 
