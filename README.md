@@ -1,7 +1,14 @@
+
 # Encryption-Decryption
 
 A Team Project written in C
 
+
+## Clone
+
+```bash
+git clone https://github.com/KDesp73/Encryption-Decryption
+```
 
 ## Authors
 
