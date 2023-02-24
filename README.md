@@ -1,14 +1,16 @@
 
 # Encryption-Decryption
 
-A Team Project written in C
+A Team Project written in C during the first semester of university. The program is able to to Encrypt and Decrypt both strings written in it, as well as txt files.
+
+## Encryption Algorithm
+
+![Screenshot 2023-02-24 105056](https://user-images.githubusercontent.com/97637624/221160950-770955cc-2fa8-45e2-94ee-46ff9368249b.png)
 
 
-## Clone
+## How to use
 
-```bash
-git clone https://github.com/KDesp73/Encryption-Decryption
-```
+Clone the project using the command ```bash git clone https://github.com/KDesp73/Encryption-Decryption``` and run the executable on Windows. 
 
 ## Authors
 
